@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApexAuto SaaS - Super Admin Control Center</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    .saas-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px 32px;
+    }
+    .super-badge {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #000;
+      font-weight: 800;
+      font-size: 10.5px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+    .credential-copy-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px dashed rgba(212, 175, 55, 0.5);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #fbbf24;
+      line-height: 1.6;
+      margin: 14px 0;
+      user-select: all;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Super Admin Header Navigation -->
+  <header class="neo-nav">
+    <div class="brand-wrapper" onclick="window.location.href='super-admin.html'">
+      <div class="brand-icon-aura" style="background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="brand-logo-text">ApexAuto</span>
+        <span class="super-badge">SaaS OWNER</span>
+      </div>
+    </div>
+
+    <!-- Right Header Actions -->
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <button class="btn-neo btn-neo-primary" onclick="openCreateGarageModal()" style="font-weight: 800; color: #000; background: linear-gradient(135deg, #fbbf24 0%, #d4af37 50%, #92400e 100%); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        Create New Garage (Tester)
+      </button>
+
+      <a href="index.html" class="btn-neo btn-neo-secondary btn-neo-sm" style="text-decoration: none;">
+        Open Workshop Floor →
+      </a>
+
+      <button class="btn-neo btn-neo-secondary btn-neo-sm" onclick="handleLogout()" style="color: #f87171; border-color: rgba(239, 68, 68, 0.3);">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Notification Banner -->
+  <div id="saasAlertBanner" class="alert-aura">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <div id="saasAlertMsg">Action executed successfully.</div>
+  </div>
+
+  <main class="saas-container">
+    
+    <!-- Page Header Strip -->
+    <div class="header-strip">
+      <div>
+        <h1 class="page-headline">SaaS Platform Administration & Client Onboarding</h1>
+        <p class="page-subhead">Generate garage login IDs, manage tester credentials, issue passwords, and monitor multi-tenant usage.</p>
+      </div>
+      <button class="btn-neo btn-neo-secondary btn-neo-sm" onclick="loadSaasData()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+        Refresh Data
+      </button>
+    </div>
+
+    <!-- Platform KPI Metrics Strip -->
+    <div class="stat-strip">
+      <div class="stat-box blue">
+        <div class="stat-lbl">Registered Garages</div>
+        <div class="stat-num" id="metricTotalGarages">0</div>
+        <div class="stat-sub">Multi-tenant workshops</div>
+      </div>
+      <div class="stat-box green">
+        <div class="stat-lbl">Active Testing Workspaces</div>
+        <div class="stat-num" id="metricActiveGarages">0</div>
+        <div class="stat-sub">Live authorized tenants</div>
+      </div>
+      <div class="stat-box amber">
+        <div class="stat-lbl">Total SaaS Users</div>
+        <div class="stat-num" id="metricTotalUsers">0</div>
+        <div class="stat-sub">Admins & mechanics</div>
+      </div>
+      <div class="stat-box red">
+        <div class="stat-lbl">Platform Bookings</div>
+        <div class="stat-num" id="metricTotalBookings">0</div>
+        <div class="stat-sub">Across all workshop bays</div>
+      </div>
+    </div>
+
+    <!-- Garages Management Table Card -->
+    <div class="neo-table-card">
+      <div class="neo-table-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 13.5px; font-weight: 800; color: #fff;">Registered Garages & Client Tester Directory</span>
+          <span class="pill pill-confirmed" id="garagesCountPill">0 Workshops</span>
+        </div>
+        <button class="btn-neo btn-neo-primary btn-neo-sm" onclick="openCreateGarageModal()">
+          + Add New Garage Client
+        </button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="neo-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Garage / Workshop Name</th>
+              <th>Owner / Contact Rep</th>
+              <th>Login Email</th>
+              <th>Password (Tester)</th>
+              <th>Plan Tier</th>
+              <th>Bookings</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="garagesTableBody">
+            <tr><td colspan="9" style="text-align: center; padding: 24px; color: var(--text-dim);">Loading garages...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==============================================
+       MODAL 1: CREATE NEW GARAGE CLIENT & GENERATE ID/PASS
+       ============================================== -->
+  <div id="createGarageModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 540px;">
+      <div class="modal-head">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 14px; font-weight: 800; color: #fff;">Create New Garage & Generate Credentials</span>
+        </div>
+        <button onclick="closeModal('createGarageModal')" style="border:none;background:none;color:var(--text-dim);cursor:pointer;font-size:20px;">&times;</button>
+      </div>
+
+      <div class="modal-content">
+        <form id="createGarageForm" onsubmit="submitCreateGarage(event)">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="input-label">Garage / Workshop Name *</label>
+            <input type="text" id="newGarageName" class="input-field" placeholder="e.g. SpeedX Motors & Diagnostics" required>
+          </div>
+
+          <div class="grid-2col">
+            <div class="form-group">
+              <label class="input-label">Owner / Client Name *</label>
+              <input type="text" id="newOwnerName" class="input-field" placeholder="e.g. Aman Gupta" required>
+            </div>
+            <div class="form-group">
+              <label class="input-label">Phone / WhatsApp</label>
+              <input type="tel" id="newPhone" class="input-field" placeholder="+91 9811223344">
+            </div>
+          </div>
+
+          <div class="grid-2col">
+            <div class="form-group">
+              <label class="input-label">Login Email ID *</label>
+              <input type="email" id="newEmail" class="input-field" placeholder="aman@speedxmotors.com" required>
+            </div>
+            <div class="form-group">
+              <label class="input-label">Subscription Tier</label>
+              <select id="newPlanTier" class="input-field">
+                <option value="Trial">14-Day Free Trial</option>
+                <option value="Pro" selected>Pro Tier ($99/mo)</option>
+                <option value="Enterprise">Enterprise Unlimited</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label class="input-label">Assigned Password *</label>
+              <button type="button" class="btn-neo btn-neo-secondary btn-neo-sm" onclick="generateRandomPass()" style="padding: 2px 8px; font-size: 10px;">
+                🎲 Generate Random
+              </button>
+            </div>
+            <input type="text" id="newPassword" class="input-field" value="Apex@2026" required style="font-family: var(--font-mono); font-weight: 700; color: #34d399;">
+          </div>
+
+          <div class="modal-foot" style="padding: 0; background: none; border: none;">
+            <button type="button" class="btn-neo btn-neo-secondary" onclick="closeModal('createGarageModal')">Cancel</button>
+            <button type="submit" class="btn-neo btn-neo-primary" style="background: linear-gradient(135deg, #fbbf24 0%, #d4af37 50%, #92400e 100%); color: #000; font-weight: 800;">
+              Create & Generate Login Credentials →
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       MODAL 2: SHAREABLE CREDENTIALS SUCCESS CARD
+       ============================================== -->
+  <div id="credentialsSuccessModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 520px; text-align: left;">
+      <div class="modal-head" style="border-bottom: 1px solid rgba(16, 185, 129, 0.3);">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 14px; font-weight: 800; color: #34d399;">✓ Garage Account Created Successfully!</span>
+        </div>
+        <button onclick="closeModal('credentialsSuccessModal')" style="border:none;background:none;color:var(--text-dim);cursor:pointer;font-size:20px;">&times;</button>
+      </div>
+
+      <div class="modal-content">
+        <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 8px;">
+          Copy and send these credentials directly to the client/tester via WhatsApp or Email:
+        </p>
+
+        <div id="credCopyText" class="credential-copy-box"></div>
+
+        <button class="btn-neo btn-neo-primary" style="width: 100%; justify-content: center; margin-top: 8px;" onclick="copyCredsToClipboard()">
+          📋 Copy Full Message to Clipboard
+        </button>
+      </div>
+
+      <div class="modal-foot">
+        <button class="btn-neo btn-neo-secondary" style="width: 100%;" onclick="closeModal('credentialsSuccessModal')">
+          Done & Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = '/api';
+
+    // Verify Super Admin Access on Load
+    document.addEventListener('DOMContentLoaded', () => {
+      const stored = localStorage.getItem('apex_user');
+      if (!stored) {
+        window.location.href = 'login.html';
+        return;
+      }
+      try {
+        const user = JSON.parse(stored);
+        if (user.role !== 'super_admin') {
+          alert('Access Denied. You must be a Super Admin to access this SaaS portal.');
+          window.location.href = 'index.html';
+          return;
+        }
+      } catch (e) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      loadSaasData();
+    });
+
+    async function loadSaasData() {
+      loadStats();
+      loadGarages();
+    }
+
+    async function loadStats() {
+      try {
+        const res = await fetch(`${API_BASE}/saas/stats`);
+        const data = await res.json();
+        if (data.success) {
+          const s = data.data;
+          document.getElementById('metricTotalGarages').innerText = s.totalTenants;
+          document.getElementById('metricActiveGarages').innerText = s.activeTenants;
+          document.getElementById('metricTotalUsers').innerText = s.totalUsers;
+          document.getElementById('metricTotalBookings').innerText = s.totalBookings;
+        }
+      } catch (err) {
+        console.error('Error loading stats:', err);
+      }
+    }
+
+    async function loadGarages() {
+      const tbody = document.getElementById('garagesTableBody');
+      try {
+        const res = await fetch(`${API_BASE}/saas/garages`);
+        const data = await res.json();
+        if (data.success) {
+          const garages = data.data;
+          document.getElementById('garagesCountPill').innerText = `${garages.length} Workshops`;
+
+          if (garages.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:24px; color:var(--text-dim);">No garages registered yet.</td></tr>`;
+            return;
+          }
+
+          tbody.innerHTML = garages.map(g => {
+            const isActive = g.status === 'Active';
+            return `
+              <tr>
+                <td style="font-family: var(--font-mono); color: var(--text-dim); font-size: 11px;">#${g.id}</td>
+                <td>
+                  <div style="font-weight: 700; color: #fff;">${escapeHtml(g.name)}</div>
+                  <div style="font-size: 10.5px; color: var(--text-dim); font-family: var(--font-mono);">${g.slug}</div>
+                </td>
+                <td>
+                  <div style="font-weight: 600; color: #e2e8f0;">${escapeHtml(g.owner_name || 'N/A')}</div>
+                  <div style="font-size: 11px; color: var(--text-dim);">${escapeHtml(g.phone || 'No phone')}</div>
+                </td>
+                <td>
+                  <span style="font-family: var(--font-mono); color: #fbbf24; font-size: 12px;">${escapeHtml(g.admin_email)}</span>
+                </td>
+                <td>
+                  <span style="font-family: var(--font-mono); font-weight: 700; color: #34d399; background: rgba(16, 185, 129, 0.1); padding: 2px 6px; border-radius: 4px; font-size: 12px;">
+                    ${escapeHtml(g.admin_password)}
+                  </span>
+                </td>
+                <td>
+                  <span style="font-size: 11px; background: rgba(212, 175, 55, 0.18); color: #fbbf24; border: 1px solid rgba(212, 175, 55, 0.4); padding: 2px 7px; border-radius: 4px; font-weight: 600;">
+                    ${g.plan_tier}
+                  </span>
+                </td>
+                <td style="font-family: var(--font-mono); font-weight: 700; color: #fff;">
+                  ${g.bookings_count}
+                </td>
+                <td>
+                  <span class="pill ${isActive ? 'pill-completed' : 'pill-danger'}">
+                    ${g.status}
+                  </span>
+                </td>
+                <td>
+                  <div style="display: flex; gap: 6px; align-items: center;">
+                    <button class="btn-neo btn-neo-secondary btn-neo-sm" title="Copy shareable credentials" onclick="showCredentialsCard('${escapeHtml(g.name)}', '${escapeHtml(g.admin_email)}', '${escapeHtml(g.admin_password)}')">
+                      📋 Share
+                    </button>
+                    <button class="btn-neo btn-neo-secondary btn-neo-sm" title="${isActive ? 'Suspend' : 'Activate'}" onclick="toggleGarageStatus(${g.id}, '${isActive ? 'Suspended' : 'Active'}')" style="color: ${isActive ? '#f87171' : '#34d399'};">
+                      ${isActive ? 'Suspend' : 'Activate'}
+                    </button>
+                    <button class="btn-neo btn-neo-secondary btn-neo-sm" title="Reset password" onclick="promptResetPassword(${g.id}, '${escapeHtml(g.name)}')">
+                      🔑 Reset
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="9" style="color:#f87171; text-align:center;">Failed to load garages.</td></tr>`;
+      }
+    }
+
+    // Modal Handlers
+    function openCreateGarageModal() {
+      generateRandomPass();
+      document.getElementById('createGarageModal').classList.add('open');
+    }
+
+    function generateRandomPass() {
+      const pass = 'Apex@' + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('newPassword').value = pass;
+    }
+
+    async function submitCreateGarage(e) {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById('newGarageName').value,
+        owner_name: document.getElementById('newOwnerName').value,
+        email: document.getElementById('newEmail').value,
+        phone: document.getElementById('newPhone').value,
+        plan_tier: document.getElementById('newPlanTier').value,
+        password: document.getElementById('newPassword').value
+      };
+
+      try {
+        const res = await fetch(`${API_BASE}/saas/garages`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          closeModal('createGarageModal');
+          document.getElementById('createGarageForm').reset();
+          loadSaasData();
+
+          // Show generated credentials modal
+          showCredentialsCard(payload.name, payload.email, payload.password);
+        } else {
+          alert('Error: ' + data.error);
+        }
+      } catch (err) {
+        alert('Server error creating garage');
+      }
+    }
+
+    let currentCopyText = '';
+
+    function showCredentialsCard(garageName, email, password) {
+      const loginUrl = window.location.origin + '/login.html';
+      currentCopyText = `🚀 Welcome to ApexAuto Garage Platform!\nHere are your live workspace credentials:\n\n🌐 Portal URL: ${loginUrl}\n👤 Login Email: ${email}\n🔑 Password: ${password}\n🏢 Garage Workspace: ${garageName}\n\nPlease sign in to access your live bay scheduling and workshop floor!`;
+
+      document.getElementById('credCopyText').innerText = currentCopyText;
+      document.getElementById('credentialsSuccessModal').classList.add('open');
+    }
+
+    function copyCredsToClipboard() {
+      navigator.clipboard.writeText(currentCopyText).then(() => {
+        showBanner('Credentials copied to clipboard! You can paste in WhatsApp/Email.');
+      }).catch(() => {
+        alert('Copied!');
+      });
+    }
+
+    async function toggleGarageStatus(id, newStatus) {
+      if (!confirm(`Are you sure you want to set Garage #${id} to ${newStatus}?`)) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/saas/garages/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showBanner(`Garage #${id} status updated to ${newStatus}`);
+          loadSaasData();
+        } else {
+          alert(data.error);
+        }
+      } catch (e) {
+        alert('Error updating status');
+      }
+    }
+
+    async function promptResetPassword(id, name) {
+      const newPass = prompt(`Enter new password for ${name}:`, 'Apex@' + Math.floor(1000 + Math.random() * 9000));
+      if (!newPass) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/saas/garages/${id}/reset-password`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ new_password: newPass })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showBanner(`Password updated for ${name} to: ${newPass}`);
+          loadSaasData();
+        } else {
+          alert(data.error);
+        }
+      } catch (e) {
+        alert('Error resetting password');
+      }
+    }
+
+    function showBanner(msg) {
+      const banner = document.getElementById('saasAlertBanner');
+      document.getElementById('saasAlertMsg').innerText = msg;
+      banner.classList.add('show');
+      setTimeout(() => banner.classList.remove('show'), 5000);
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('apex_user');
+      localStorage.removeItem('apex_token');
+      window.location.href = 'login.html';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>

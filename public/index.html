@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApexAuto - Next-Gen Automotive Service Platform</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Ultra-Modern Left Side Panel Navigation (Sidebar) -->
+  <aside class="neo-sidebar">
+    <div class="sidebar-top">
+      <!-- Brand & Sidebar Toggle -->
+      <div class="brand-header-flex" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+        <div class="brand-wrapper" onclick="switchTab('dashboard-view')" style="cursor: pointer;">
+          <div class="brand-icon-aura">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 10.7 2 11.1 2 11.5V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+          </div>
+          <div class="brand-text-block" style="display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="brand-logo-text">ApexAuto</span>
+              <span class="brand-tag">PRO</span>
+            </div>
+            <span style="font-size: 10px; color: var(--text-dim); letter-spacing: 0.3px;">Enterprise ERP</span>
+          </div>
+        </div>
+
+        <button id="sidebarToggleBtn" class="btn-sidebar-toggle" onclick="toggleSidebarCollapse()" title="Toggle Sidebar (Collapse / Expand)">
+          <svg id="sidebarToggleIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><path d="m14 9-3 3 3 3"></path></svg>
+        </button>
+      </div>
+
+      <!-- Tenant Garage Pill -->
+      <div id="tenantBadgePill" class="live-pulse-badge" style="background: rgba(212, 175, 55, 0.12); border-color: rgba(212, 175, 55, 0.35); color: #fbbf24; margin-bottom: 14px; width: 100%; box-sizing: border-box; justify-content: flex-start; padding: 6px 10px;">
+        <span class="pulse-dot"></span>
+        <span id="navGarageName" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;">Main Garage</span>
+      </div>
+
+      <!-- Main Navigation Menu -->
+      <div class="sidebar-section-title">WORKSPACE MODULES</div>
+      <nav class="sidebar-nav-list">
+        <button class="nav-tab-pill active" onclick="switchTab('dashboard-view')" title="Dashboard">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span class="nav-label">Dashboard</span>
+        </button>
+        <button class="nav-tab-pill" onclick="switchTab('admin-bookings')" title="Bookings & Bays">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          <span class="nav-label">Bookings & Bays</span>
+        </button>
+        <button class="nav-tab-pill" onclick="switchTab('admin-ratecard')" title="Rate Card & Pricing">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><line x1="12" y1="6" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="18"></line></svg>
+          <span class="nav-label">Rate Card & Pricing</span>
+        </button>
+        <button class="nav-tab-pill" onclick="switchTab('admin-inventory')" title="Inventory & Parts">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          <span class="nav-label">Inventory & Parts</span>
+        </button>
+        <button class="nav-tab-pill" onclick="switchTab('admin-expenses')" title="Financials & Outflow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          <span class="nav-label">Financials & Outflow</span>
+        </button>
+        <button class="nav-tab-pill" onclick="switchTab('admin-staff')" title="Staff & Crew">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span class="nav-label">Staff & Crew</span>
+        </button>
+        <button class="nav-tab-pill" onclick="switchTab('admin-vendors')" title="Vendors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <span class="nav-label">Vendors</span>
+        </button>
+        <button class="nav-tab-pill" onclick="switchTab('admin-settings')" title="Garage & Tax Settings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span class="nav-label">Settings & Tax</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Sidebar Bottom: CTA, SaaS Admin, Profile & Actions -->
+    <div class="sidebar-bottom">
+      <button class="btn-neo btn-neo-primary sidebar-cta-btn" style="width: 100%; justify-content: center; padding: 10px 14px; font-weight: 800; font-size: 12px; box-shadow: 0 0 16px var(--primary-glow);" onclick="openNewBookingModal()" title="Add Booking">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <span class="cta-label">Add Booking</span>
+      </button>
+
+      <a href="super-admin.html" id="superAdminLinkBtn" class="sidebar-action-row" style="display: none; color: #fbbf24; text-decoration: none; justify-content: center; font-weight: 700;" title="SaaS Admin Portal">
+        👑 <span style="margin-left: 4px;">SaaS Admin Portal</span>
+      </a>
+
+      <button class="sidebar-action-row" onclick="refreshCurrentTab()" title="Sync live garage data">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+        <span>Sync Workspace</span>
+      </button>
+
+      <div class="sidebar-user-card">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(212, 175, 55, 0.2); border: 1px solid rgba(212, 175, 55, 0.4); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px; color: #fbbf24;" id="sidebarUserAvatar">
+            A
+          </div>
+          <div class="sidebar-user-meta" style="display: flex; flex-direction: column;">
+            <span style="font-size: 11.5px; font-weight: 700; color: #fff;" id="sidebarUserName">Admin</span>
+            <span style="font-size: 10px; color: var(--text-dim);" id="sidebarUserRole">Manager</span>
+          </div>
+        </div>
+        <button onclick="handleLogout()" title="Logout" style="background: none; border: none; color: #f87171; cursor: pointer; padding: 4px; display: flex; align-items: center;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#f87171'">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Viewport (Zero Scroll Architecture) -->
+  <main class="app-container">
+
+    <!-- Notification Toast / Banner with Aura Glow -->
+    <div id="bookingAlertBanner" class="alert-aura">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+      <div id="bookingAlertMessage">Booking confirmed! Service bay reserved & alert sent to garage manager.</div>
+    </div>
+
+    <!-- ========================================================
+         TAB 1: EXECUTIVE WORKSHOP DASHBOARD (MAIN LANDING VIEW)
+         ======================================================== -->
+    <section id="tab-dashboard-view" class="tab-content active">
+      <div class="header-strip">
+        <div>
+          <h1 class="page-headline">Shop Floor Executive Dashboard</h1>
+          <p class="page-subhead">Live automotive operations, revenue health, parts inventory alerts, and active technician bays.</p>
+        </div>
+        <button class="btn-neo btn-neo-primary" onclick="openNewBookingModal()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Add New Booking
+        </button>
+      </div>
+
+      <!-- KPI Metrics Strip -->
+      <div class="stat-strip">
+        <div class="stat-box blue">
+          <div class="stat-lbl">Today's Bookings</div>
+          <div class="stat-num" id="dashTodayCount">0</div>
+          <div class="stat-sub">Cars arriving today</div>
+        </div>
+        <div class="stat-box amber">
+          <div class="stat-lbl">Pending Confirmation</div>
+          <div class="stat-num" id="dashPendingCount">0</div>
+          <div class="stat-sub">Needs bay approval</div>
+        </div>
+        <div class="stat-box green">
+          <div class="stat-lbl">Inventory Asset Value</div>
+          <div class="stat-num" id="dashInventoryVal">$0</div>
+          <div class="stat-sub">Stock across all racks</div>
+        </div>
+        <div class="stat-box red">
+          <div class="stat-lbl">Low Stock Alerts</div>
+          <div class="stat-num" id="dashLowStockCount">0</div>
+          <div class="stat-sub">Needs supplier restock</div>
+        </div>
+      </div>
+
+      <!-- ROW 2: Two Cards Side-by-Side (Operational Health & Payment Flow + Cash Cycle) -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+        <!-- Left: Operational Health Card -->
+        <div class="glass-panel" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="sp-title">
+              <span>OPERATIONAL HEALTH</span>
+              <span class="pill pill-completed">Optimal</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
+              <div class="sp-row">
+                <span class="sp-label">Active Technicians on Duty:</span>
+                <span class="sp-val" id="dashActiveStaff">0 Crew</span>
+              </div>
+              <div class="sp-row">
+                <span class="sp-label">Active Suppliers / Vendors:</span>
+                <span class="sp-val" id="dashTotalVendors">0 Vendors</span>
+              </div>
+              <div class="sp-row">
+                <span class="sp-label">Total Recorded Expenses:</span>
+                <span class="sp-val" id="dashTotalExpenses" style="color: #f87171;">$0</span>
+              </div>
+              <div class="sp-row">
+                <span class="sp-label">Vendor Pending Payable:</span>
+                <span class="sp-val" id="dashPendingVendorPay" style="color: #fbbf24;">$0</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--text-dim);">
+            <span>Bay Capacity Status:</span>
+            <span style="color: #34d399; font-weight: 700;">Ready for Service Inflow</span>
+          </div>
+        </div>
+
+        <!-- Right: Payment Flow & Cash Cycle Card -->
+        <div class="glass-panel" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="sp-title" style="display: flex; justify-content: space-between; align-items: center;">
+              <span>PAYMENT FLOW & CASH CYCLE</span>
+              <span class="pill pill-completed" style="font-size: 9.5px;">IN-BALANCE</span>
+            </div>
+
+            <!-- Inflow Bar -->
+            <div style="margin-top: 8px; margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 5px;">
+                <span style="color: var(--text-dim);">Gross Service Inflow</span>
+                <span style="color: #34d399; font-weight: 700; font-family: var(--font-mono); font-size: 13px;">$8,450.00</span>
+              </div>
+              <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden;">
+                <div style="width: 78%; height: 100%; background: linear-gradient(90deg, #f59e0b, #d4af37); border-radius: 3px;"></div>
+              </div>
+            </div>
+
+            <!-- Outflow Bar -->
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 5px;">
+                <span style="color: var(--text-dim);">Operating Outflows (Parts & Rent)</span>
+                <span style="color: #f87171; font-weight: 700; font-family: var(--font-mono); font-size: 13px;">$6,530.00</span>
+              </div>
+              <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden;">
+                <div style="width: 58%; height: 100%; background: linear-gradient(90deg, #ef4444, #f59e0b); border-radius: 3px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Net Operating Margin Pill -->
+          <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 10px 14px; font-size: 12px; margin-top: 8px;">
+            <span style="color: #94a3b8; font-weight: 600;">Net Realized Margin:</span>
+            <span style="color: #34d399; font-weight: 800; font-family: var(--font-mono); font-size: 13px;">+$1,920.00 (23%)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3: Full-Screen Wide Card for Today's Priority Service Schedule -->
+      <div class="neo-table-card" style="width: 100%; margin-bottom: 24px;">
+        <div class="neo-table-header" style="flex-wrap: wrap; gap: 12px; padding: 14px 18px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 14px; font-weight: 800; color: #fff;">Today's Priority Service Schedule</span>
+            <span class="pill pill-confirmed">LIVE BAY SYNC</span>
+          </div>
+
+          <!-- Quick Status Filter Pills (Tap to filter in real-time) -->
+          <div class="dash-filter-group" id="dashFilterPills">
+            <button class="btn-filter-pill active" onclick="filterDashboardBookings('All', this)">All Schedule</button>
+            <button class="btn-filter-pill" onclick="filterDashboardBookings('Pending', this)">Pending</button>
+            <button class="btn-filter-pill" onclick="filterDashboardBookings('In-Progress', this)">In Progress</button>
+            <button class="btn-filter-pill" onclick="filterDashboardBookings('Completed', this)">Completed</button>
+            <button class="btn-filter-pill" onclick="filterDashboardBookings('Confirmed', this)">Confirmed</button>
+          </div>
+
+          <button class="btn-neo btn-neo-secondary btn-neo-sm" onclick="switchTab('admin-bookings')">View All Bookings →</button>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="neo-table">
+            <thead>
+              <tr>
+                <th>Booking #</th>
+                <th>Client & Phone</th>
+                <th>Vehicle & License Plate</th>
+                <th>Service Tier</th>
+                <th>Bay Window & Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="dashTodayTableBody">
+              <tr><td colspan="7" style="text-align: center; padding: 24px; color: var(--text-dim);">Loading today's schedule...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <!-- ========================================================
+         TAB 2: OPERATIONS (ADMIN)
+         ======================================================== -->
+    <section id="tab-admin-bookings" class="tab-content" style="display: none;">
+      <div class="header-strip">
+        <div>
+          <h1 class="page-headline">Workshop Operations & Job Cards</h1>
+          <p class="page-subhead">Manage live vehicle bays, postpone or reschedule bookings to tomorrow, and track active statuses.</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="bookingSearchInput" class="input-field" style="width: 220px;" placeholder="Search customer, phone, car #..." oninput="loadBookings()">
+          <select id="bookingStatusFilter" class="input-field" style="width: 140px;" onchange="loadBookings()">
+            <option value="All">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="In-Progress">In-Progress</option>
+            <option value="Completed">Completed</option>
+            <option value="Rescheduled">Rescheduled</option>
+            <option value="No-Show">No-Show / Cancelled</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Live KPI Strip -->
+      <div class="stat-strip">
+        <div class="stat-box blue">
+          <div class="stat-lbl">Today's Inflow</div>
+          <div class="stat-num" id="statTodayBookings">0</div>
+          <div class="stat-sub">Vehicles scheduled today</div>
+        </div>
+        <div class="stat-box amber">
+          <div class="stat-lbl">Awaiting Bay Allocation</div>
+          <div class="stat-num" id="statPendingBookings">0</div>
+          <div class="stat-sub">Needs mechanic confirmation</div>
+        </div>
+        <div class="stat-box green">
+          <div class="stat-lbl">On Active Ramp</div>
+          <div class="stat-num" id="statInProgressBookings">0</div>
+          <div class="stat-sub">Under active servicing</div>
+        </div>
+        <div class="stat-box red">
+          <div class="stat-lbl">Postponed / Moved</div>
+          <div class="stat-num" id="statRescheduledBookings">0</div>
+          <div class="stat-sub">Shifted to next date</div>
+        </div>
+      </div>
+
+      <!-- Modern Data Table -->
+      <div class="neo-table-card">
+        <div class="neo-table-header">
+          <span style="font-size: 13px; font-weight: 700; color: #fff;">Live Service Queue</span>
+          <span style="font-size: 11px; color: var(--text-dim); font-family: var(--font-mono);">SYNCED REAL-TIME</span>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="neo-table">
+            <thead>
+              <tr>
+                <th>Booking Ref</th>
+                <th>Client & Phone</th>
+                <th>Vehicle & Plate</th>
+                <th>Service Tier</th>
+                <th>Date & Window</th>
+                <th>Status</th>
+                <th>Est. Invoice</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="bookingsTableBody">
+              <tr><td colspan="8" style="text-align: center; padding: 20px; color: var(--text-dim);">Loading bookings...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         TAB: FULL-PAGE DIGITAL WORKSHOP JOB CARD & FORM VIEW (EDITABLE)
+         ======================================================== -->
+    <section id="tab-booking-detail-view" class="tab-content" style="display: none;">
+      <!-- Top Action Bar with prominent Back & Save button -->
+      <div class="back-nav-bar" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; flex-wrap: wrap;">
+        <button class="btn-neo btn-neo-secondary" onclick="closeBookingDetailView()" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 700; padding: 8px 16px; border-color: rgba(212, 175, 55, 0.4); color: #fbbf24;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          ← Back to Bookings List
+        </button>
+
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <button class="btn-neo btn-neo-primary" id="btnTopSaveJobCard" onclick="saveBookingEdits()" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 800; padding: 8px 20px; font-size: 13px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            Save Job Card Changes
+          </button>
+          <button class="btn-neo btn-neo-secondary btn-neo-sm" onclick="openRescheduleFromDetails()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            Move Date
+          </button>
+          <button class="btn-neo btn-neo-secondary btn-neo-sm" onclick="printJobCard()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            Print Job Card
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Job Card Viewport -->
+      <div class="job-card-view">
+        <!-- Header Strip -->
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="background: rgba(212, 175, 55, 0.18); border: 1px solid rgba(212, 175, 55, 0.45); border-radius: 8px; padding: 8px 14px; font-family: var(--font-mono); font-weight: 800; font-size: 16px; color: #fbbf24; letter-spacing: 0.5px;" id="detailBookingRef">
+              BK-0000
+            </div>
+            <div>
+              <div style="font-size: 16px; font-weight: 800; color: #fff;">Digital Workshop Job Card & Inspection Form</div>
+              <div style="font-size: 12px; color: var(--text-dim);" id="detailCreatedAt">Created: Recently</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span id="detailStatusBadge" class="pill pill-confirmed" style="font-size: 12px; padding: 5px 12px;">CONFIRMED</span>
+          </div>
+        </div>
+
+        <!-- Interactive Workshop Workflow Stepper -->
+        <div class="job-stepper-container" id="jobWorkflowStepper">
+          <div class="stepper-step" id="step-Pending" onclick="changeStatusFromStepper('Pending')">
+            <div class="stepper-circle" id="circle-Pending">1</div>
+            <div class="stepper-label">
+              <div class="stepper-title">Queue Received</div>
+              <div class="stepper-sub">New Booking</div>
+            </div>
+          </div>
+          <div class="stepper-line" id="line-1"></div>
+          <div class="stepper-step" id="step-Confirmed" onclick="changeStatusFromStepper('Confirmed')">
+            <div class="stepper-circle" id="circle-Confirmed">2</div>
+            <div class="stepper-label">
+              <div class="stepper-title">Bay Locked</div>
+              <div class="stepper-sub">Check-in Ready</div>
+            </div>
+          </div>
+          <div class="stepper-line" id="line-2"></div>
+          <div class="stepper-step" id="step-In-Progress" onclick="changeStatusFromStepper('In-Progress')">
+            <div class="stepper-circle" id="circle-In-Progress">3</div>
+            <div class="stepper-label">
+              <div class="stepper-title">In-Service Bay</div>
+              <div class="stepper-sub">Work on Floor</div>
+            </div>
+          </div>
+          <div class="stepper-line" id="line-3"></div>
+          <div class="stepper-step" id="step-Completed" onclick="changeStatusFromStepper('Completed')">
+            <div class="stepper-circle" id="circle-Completed">4</div>
+            <div class="stepper-label">
+              <div class="stepper-title">Settled & Cleared</div>
+              <div class="stepper-sub">Vehicle Released</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- Technician & Bay Floor Allocation -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 14px 16px;">
+            <div style="font-size: 11px; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+              Technician & Workshop Bay Allocation
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px; font-weight: 600;">Assigned Lead Mechanic / Crew</label>
+                <select id="editDetailAssignedStaff" class="input-field" style="font-size: 13px; font-weight: 700;">
+                  <option value="">-- Assign Mechanic --</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px; font-weight: 600;">Dedicated Workshop Bay</label>
+                <select id="editDetailAssignedBay" class="input-field" style="font-size: 13px; font-weight: 700; color: #fbbf24;">
+                  <option value="Bay 1 - Heavy Hydraulic Lift">Bay 1 - Heavy Hydraulic Lift</option>
+                  <option value="Bay 2 - Fast Inspection & Flush">Bay 2 - Fast Inspection & Flush</option>
+                  <option value="Bay 3 - Electrical, AC & ECU Tuning">Bay 3 - Electrical, AC & ECU Tuning</option>
+                  <option value="Bay 4 - Detailing, Wash & Ceramic">Bay 4 - Detailing, Wash & Ceramic</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customer & Vehicle Info Grid (Editable Inputs) -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <!-- Customer Profile -->
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px;">
+              <div style="font-size: 11px; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Customer Profile & Contacts
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div>
+                  <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px; font-weight: 600;">Customer Full Name</label>
+                  <input type="text" id="editDetailCustomerName" class="input-field" placeholder="Client Name" style="font-weight: 700; color: #fff; font-size: 14px;">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                  <div>
+                    <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px; font-weight: 600;">Phone Number</label>
+                    <input type="tel" id="editDetailCustomerPhone" class="input-field" placeholder="+91 98765 43210" style="color: #fbbf24; font-weight: 700; font-family: var(--font-mono);">
+                  </div>
+                  <div>
+                    <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px; font-weight: 600;">Email Address</label>
+                    <input type="email" id="editDetailCustomerEmail" class="input-field" placeholder="client@example.com">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vehicle Details -->
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px;">
+              <div style="font-size: 11px; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                Vehicle Information & Plate
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div>
+                  <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px; font-weight: 600;">Vehicle Make & Model</label>
+                  <input type="text" id="editDetailVehicleName" class="input-field" placeholder="e.g. BMW 520d / Honda City" style="font-weight: 700; color: #fff; font-size: 14px;">
+                </div>
+                <div>
+                  <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px; font-weight: 600;">Registration / License Plate Number</label>
+                  <input type="text" id="editDetailRegPlate" class="input-field" placeholder="MH 02 CD 9988" style="font-family: var(--font-mono); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #f1f5f9; background: rgba(255,255,255,0.06);">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service & Appointment Details Strip (Editable) -->
+          <div style="background: rgba(212, 175, 55, 0.08); border: 1px solid rgba(212, 175, 55, 0.35); border-radius: 10px; padding: 16px;">
+            <div style="display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1fr; gap: 14px; align-items: center;">
+              <div>
+                <label style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 4px;">Selected Service Package</label>
+                <select id="editDetailServicePackage" class="input-field" style="font-size: 13px; font-weight: 700;">
+                  <option value="General Maintenance & Filter">General Maintenance & Filter</option>
+                  <option value="Full Synthetic Oil & Mechanical">Full Synthetic Oil & Mechanical</option>
+                  <option value="Luxury Major Overhaul & Detail">Luxury Major Overhaul & Detail</option>
+                  <option value="Complete Deep Detailing & Ceramic">Complete Deep Detailing & Ceramic</option>
+                  <option value="Other">Other / Custom Work Order</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 4px;">Bay Date</label>
+                <input type="date" id="editDetailBookingDate" class="input-field" style="font-size: 12.5px; font-weight: 600; color: #fbbf24;">
+              </div>
+              <div>
+                <label style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 4px;">Time Window</label>
+                <select id="editDetailTimeSlot" class="input-field" style="font-size: 12.5px; font-weight: 600; color: #fbbf24;">
+                  <option value="09:00 AM - 11:00 AM">09:00 AM - 11:00 AM</option>
+                  <option value="11:00 AM - 01:00 PM">11:00 AM - 01:00 PM</option>
+                  <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM</option>
+                  <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 4px;">Est. Amount ($)</label>
+                <input type="number" id="editDetailTotalAmount" class="input-field" style="font-size: 16px; font-weight: 900; color: #34d399; font-family: var(--font-mono);">
+              </div>
+            </div>
+          </div>
+
+          <!-- Pre-Service Diagnostic Checklist (Interactive Toggles) -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px;">
+            <div style="font-size: 12px; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+              <span>Diagnostic Checklist & Add-On Preferences</span>
+              <span style="font-size: 10.5px; color: var(--text-dim); text-transform: none; font-weight: normal;">Click to include/exclude services</span>
+            </div>
+            <div id="detailChecklistGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <!-- Rendered dynamically with interactive checkboxes -->
+            </div>
+          </div>
+
+          <!-- Customer Stated Issue / Diagnostic Notes (Editable) -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px;">
+            <div style="font-size: 12px; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px;">
+              Customer Stated Issue / Work Order Complaints
+            </div>
+            <textarea id="editDetailIssueNotes" class="input-field" rows="3" placeholder="Enter specific customer complaint, squeaks, vibrations, or requested jobs..." style="line-height: 1.6;"></textarea>
+          </div>
+
+          <!-- Workshop Internal Notes -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px;">
+            <div style="font-size: 12px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px;">
+              Internal Garage Floor / Technician Notes
+            </div>
+            <textarea id="editDetailInternalNotes" class="input-field" rows="2" placeholder="Internal technician observations, spare parts needed, or history..." style="line-height: 1.6;"></textarea>
+          </div>
+
+          <!-- Status Change & Save Control Strip -->
+          <div style="background: rgba(212, 175, 55, 0.08); border: 1px solid rgba(212, 175, 55, 0.35); border-radius: 10px; padding: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+              <label style="font-size: 13px; font-weight: 700; color: #fff;">Change Status:</label>
+              <select id="detailStatusSelect" class="input-field" style="width: auto; padding: 7px 12px; font-size: 13px; font-weight: 600;">
+                <option value="Confirmed">Confirmed</option>
+                <option value="In-Progress">In-Progress</option>
+                <option value="Completed">Completed (Payment)</option>
+                <option value="Rescheduled">Rescheduled</option>
+                <option value="No-Show">No-Show</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+              <button class="btn-neo btn-neo-secondary" onclick="saveStatusFromModal()" style="padding: 8px 16px; font-weight: 700;">
+                Update Status
+              </button>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <button class="btn-neo btn-neo-primary" id="btnBottomSaveJobCard" onclick="saveBookingEdits()" style="padding: 9px 22px; font-weight: 800; font-size: 13px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                Save Job Card Changes
+              </button>
+              <button class="btn-neo btn-neo-secondary" onclick="closeBookingDetailView()">
+                ← Back to List
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         TAB: SERVICE RATE CARD & MASTER PRICING (MAIN ADMIN)
+         ======================================================== -->
+    <section id="tab-admin-ratecard" class="tab-content" style="display: none;">
+      <div class="header-strip">
+        <div>
+          <h1 class="page-headline">💰 Service Rate Card & Master Pricing</h1>
+          <p class="page-subhead">Configure baseline labor rates for car wash, oil change, periodic maintenance & deep cleaning estimates.</p>
+        </div>
+        <button class="btn-neo btn-neo-primary" onclick="openAddRateCardModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          + Add Service Rate
+        </button>
+      </div>
+
+      <!-- Quick KPI Strip for Rate Card -->
+      <div class="stat-strip" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 18px;">
+        <div class="stat-box blue">
+          <div class="stat-lbl">Active Service Tiers</div>
+          <div class="stat-num" id="rcTotalServices">8 Services</div>
+        </div>
+        <div class="stat-box green">
+          <div class="stat-lbl">Wash Baseline</div>
+          <div class="stat-num" id="rcWashPrice">$35.00</div>
+        </div>
+        <div class="stat-box gold">
+          <div class="stat-lbl">Normal Full Service</div>
+          <div class="stat-num" id="rcNormalPrice">$150.00</div>
+        </div>
+        <div class="stat-box red">
+          <div class="stat-lbl">Deep Clean & Ceramic</div>
+          <div class="stat-num" id="rcDeepPrice">$220.00</div>
+        </div>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div class="filter-bar" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="rateCardCategoryFilter">
+          <button class="filter-pill active" onclick="filterRateCardCategory('All', this)">All Services</button>
+          <button class="filter-pill" onclick="filterRateCardCategory('Cleaning & Wash', this)">🧼 Wash & Vacuum</button>
+          <button class="filter-pill" onclick="filterRateCardCategory('Fluids & Lubricants', this)">🛢️ Oil & Fluids</button>
+          <button class="filter-pill" onclick="filterRateCardCategory('Periodic Service', this)">🔧 Normal Service</button>
+          <button class="filter-pill" onclick="filterRateCardCategory('Detailing', this)">✨ Deep Detailing</button>
+          <button class="filter-pill" onclick="filterRateCardCategory('Mechanical & Brakes', this)">🛑 Brakes & Mechanical</button>
+          <button class="filter-pill" onclick="filterRateCardCategory('AC & Electrical', this)">❄️ AC & Electrical</button>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="rcSearchInput" class="input-field" placeholder="Search rate card..." style="padding: 6px 12px; font-size: 12px; width: 220px;" oninput="debounceRateCardSearch()">
+        </div>
+      </div>
+
+      <!-- Table View -->
+      <div class="neo-table-card">
+        <div class="neo-table-header">
+          <span style="font-size: 13px; font-weight: 700; color: #fff;">Garage Standard Master Pricing Sheet</span>
+          <span style="font-size: 11px; color: var(--text-dim); font-family: var(--font-mono);">BASE RATES LINKED TO ESTIMATES & BILLING</span>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="neo-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Service Package & Scope</th>
+                <th>Category</th>
+                <th>Bay Duration</th>
+                <th>Standard Rate</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rateCardTableBody">
+              <tr><td colspan="7" style="text-align: center; padding: 20px; color: var(--text-dim);">Loading rate card...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         TAB 3: INVENTORY
+         ======================================================== -->
+    <section id="tab-admin-inventory" class="tab-content" style="display: none;">
+      <div class="header-strip">
+        <div>
+          <h1 class="page-headline">Store Inventory & Auto Components</h1>
+          <p class="page-subhead">Track parts inventory, SKU shelves, minimum safety thresholds, and unit profitability.</p>
+        </div>
+        <button class="btn-neo btn-neo-primary" onclick="openAddPartModal()">+ Add New Component</button>
+      </div>
+
+      <div class="neo-table-card">
+        <div class="neo-table-header">
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-neo btn-neo-secondary btn-neo-sm" onclick="filterLowStock()">Show Low Stock Only</button>
+            <input type="text" id="invSearchInput" class="input-field" style="width: 200px; padding: 4px 10px;" placeholder="Filter SKU, part..." oninput="loadInventory()">
+          </div>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="neo-table">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Component Name</th>
+                <th>Category</th>
+                <th>In-Stock</th>
+                <th>Safety Min</th>
+                <th>Cost ($)</th>
+                <th>Selling ($)</th>
+                <th>Rack Location</th>
+                <th>Vendor</th>
+                <th>Quick Stock</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTableBody">
+              <tr><td colspan="10" style="text-align: center; padding: 20px; color: var(--text-dim);">Loading inventory...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <!-- ========================================================
+         TAB 4: FINANCIALS (EXPENSES)
+         ======================================================== -->
+    <section id="tab-admin-expenses" class="tab-content" style="display: none;">
+      <div class="header-strip">
+        <div>
+          <h1 class="page-headline">Financials & Workshop Expenses</h1>
+          <p class="page-subhead">Monitor operating outflows, equipment purchases, commercial utilities, and staff payroll.</p>
+        </div>
+        <button class="btn-neo btn-neo-primary" onclick="openAddExpenseModal()">+ Record Outflow</button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px;">
+        <div class="neo-table-card">
+          <div class="neo-table-header">
+            <span style="font-size: 13px; font-weight: 700; color: #fff;">Expense Ledger</span>
+            <select id="expenseCategoryFilter" class="input-field" style="width: 140px; padding: 4px 8px;" onchange="loadExpenses()">
+              <option value="All">All Categories</option>
+              <option value="Rent">Workshop Rent</option>
+              <option value="Electricity">Electricity</option>
+              <option value="Parts Purchase">Parts Purchase</option>
+              <option value="Tools">Tools</option>
+              <option value="Miscellaneous">Miscellaneous</option>
+            </select>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="neo-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Vendor</th>
+                  <th>Amount</th>
+                  <th>Mode</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="expensesTableBody">
+                <tr><td colspan="7" style="text-align: center; padding: 20px; color: var(--text-dim);">Loading expenses...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="glass-panel">
+          <div class="sp-title">
+            <span>CATEGORY BREAKDOWN</span>
+          </div>
+          <div id="expenseCategorySummary" style="display: flex; flex-direction: column; gap: 8px;">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <!-- ========================================================
+         TAB 5: CREW & STAFF
+         ======================================================== -->
+    <section id="tab-admin-staff" class="tab-content" style="display: none;">
+      <div class="header-strip">
+        <div>
+          <h1 class="page-headline">Technicians & Workshop Crew</h1>
+          <p class="page-subhead">Manage technicians, diagnostic specialists, availability status, and skill tags.</p>
+        </div>
+        <button class="btn-neo btn-neo-primary" onclick="openAddStaffModal()">+ Add Crew Member</button>
+      </div>
+
+      <div class="neo-table-card">
+        <div class="neo-table-header">
+          <span style="font-size: 13px; font-weight: 700; color: #fff;">Active Floor Specialists</span>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="neo-table">
+            <thead>
+              <tr>
+                <th>Specialist ID</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Contact</th>
+                <th>Core Competencies</th>
+                <th>Monthly ($)</th>
+                <th>Status</th>
+                <th>Toggle</th>
+              </tr>
+            </thead>
+            <tbody id="staffTableBody">
+              <tr><td colspan="8" style="text-align: center; padding: 20px; color: var(--text-dim);">Loading staff...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <!-- ========================================================
+         TAB 6: VENDORS
+         ======================================================== -->
+    <section id="tab-admin-vendors" class="tab-content" style="display: none;">
+      <div class="header-strip">
+        <div>
+          <h1 class="page-headline">Vendors & Component Distributors</h1>
+          <p class="page-subhead">Maintain OEM supplier records, GST numbers, contact reps, and outstanding account balances.</p>
+        </div>
+        <button class="btn-neo btn-neo-primary" onclick="openAddVendorModal()">+ Register Supplier</button>
+      </div>
+
+      <div class="neo-table-card">
+        <div class="neo-table-header">
+          <span style="font-size: 13px; font-weight: 700; color: #fff;">Certified Distributors</span>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="neo-table">
+            <thead>
+              <tr>
+                <th>Vendor ID</th>
+                <th>Distributor Name</th>
+                <th>Contact Person</th>
+                <th>Phone & Email</th>
+                <th>Category</th>
+                <th>GSTIN</th>
+                <th>Payable Balance</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="vendorsTableBody">
+              <tr><td colspan="8" style="text-align: center; padding: 20px; color: var(--text-dim);">Loading suppliers...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         TAB 7: GARAGE PROFILE & COUNTRY TAX ENGINE
+         ======================================================== -->
+    <section id="tab-admin-settings" class="tab-content" style="display: none;">
+      <div class="header-strip">
+        <div>
+          <h1 class="page-headline">⚙️ Garage Profile, Country & Tax Engine</h1>
+          <p class="page-subhead">Set your operating country for automatic GST/VAT/Sales Tax defaults, customize tax rates, manage company contact details and receipt styling.</p>
+        </div>
+        <button class="btn-neo btn-neo-primary" onclick="saveGarageSettings()" id="btnSaveGarageSettingsTop">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          Save All Settings
+        </button>
+      </div>
+
+      <!-- Quick Country & Tax Engine Summary Bar -->
+      <div class="stat-strip" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+        <div class="stat-box blue">
+          <div class="stat-lbl">Operating Country</div>
+          <div class="stat-num" id="statSettingsCountry">India 🇮🇳</div>
+          <div class="stat-sub" id="statSettingsCurrency">Currency: INR (₹)</div>
+        </div>
+        <div class="stat-box gold">
+          <div class="stat-lbl">Active Tax Structure</div>
+          <div class="stat-num" id="statSettingsTaxType">GST 18.0%</div>
+          <div class="stat-sub" id="statSettingsTaxStatus">Tax Enabled on Invoices</div>
+        </div>
+        <div class="stat-box green">
+          <div class="stat-lbl">Tax Registration ID</div>
+          <div class="stat-num" id="statSettingsTaxNumber" style="font-size: 15px; font-family: var(--font-mono); letter-spacing: 0.5px;">07AAPCA1234F1Z5</div>
+          <div class="stat-sub" id="statSettingsTaxLabel">GSTIN Verified</div>
+        </div>
+        <div class="stat-box red">
+          <div class="stat-lbl">Invoice Series</div>
+          <div class="stat-num" id="statSettingsPrefix">INV-</div>
+          <div class="stat-sub">Thermal & PDF Slip Ready</div>
+        </div>
+      </div>
+
+      <!-- Two Column Layout: Settings Controls on Left, Live Thermal Invoice Preview on Right -->
+      <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; align-items: start;">
+        
+        <!-- Left: Configuration Form -->
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          
+          <!-- Card 1: Country & Tax Engine Selection -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 20px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 16px;">🌍</span>
+                <span style="font-size: 13.5px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 0.6px;">Country & Tax Engine Preset</span>
+              </div>
+              <span class="pill pill-confirmed" style="font-size: 10px;">Automated Defaults</span>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+              <label class="input-label" style="font-size: 12px; color: #fbbf24;">Select Country (Auto-loads Tax Type, Rate & Currency) *</label>
+              <select id="cfgCountry" class="input-field" onchange="handleCountryChange(this.value)" style="font-size: 13.5px; font-weight: 700; color: #fff; background: rgba(0,0,0,0.4); padding: 10px 12px; border: 1px solid rgba(212, 175, 55, 0.5);">
+                <option value="India">🇮🇳 India (GST 18% • ₹ INR • GSTIN)</option>
+                <option value="United Arab Emirates">🇦🇪 United Arab Emirates (VAT 5% • AED • TRN)</option>
+                <option value="Saudi Arabia">🇸🇦 Saudi Arabia (VAT 15% • SAR • VAT No)</option>
+                <option value="United States">🇺🇸 United States (Sales Tax 8.25% • $ USD • EIN/Tax ID)</option>
+                <option value="United Kingdom">🇬🇧 United Kingdom (VAT 20% • £ GBP • VAT Reg)</option>
+                <option value="Canada">🇨🇦 Canada (GST/HST 13% • $ CAD • Business No)</option>
+                <option value="Australia">🇦🇺 Australia (GST 10% • A$ AUD • ABN)</option>
+                <option value="Germany">🇩🇪 Germany (MwSt 19% • € EUR • USt-IdNr)</option>
+                <option value="Singapore">🇸🇬 Singapore (GST 9% • S$ SGD • GST Reg)</option>
+                <option value="Other">🌐 Other Country / Custom Tax Structure</option>
+              </select>
+              <div style="font-size: 11px; color: var(--text-dim); margin-top: 5px;" id="cfgCountryNote">
+                Standard 18% GST (CGST 9% + SGST 9% on Automotive Repair) pre-filled. You can modify any rate below.
+              </div>
+            </div>
+
+            <!-- Tax Engine Controls (User can customize percentage and all parameters) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+              <div class="input-container">
+                <label class="input-label">Tax System Name *</label>
+                <input type="text" id="cfgTaxName" class="input-field" placeholder="e.g. GST or VAT" oninput="updateSettingsLivePreview()" style="font-weight: 700;">
+              </div>
+              <div class="input-container">
+                <label class="input-label">Tax Rate Percentage (%) *</label>
+                <input type="number" id="cfgTaxRate" step="0.1" min="0" max="100" class="input-field" placeholder="18.0" oninput="updateSettingsLivePreview()" style="font-weight: 900; color: #34d399; font-family: var(--font-mono);">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+              <div class="input-container">
+                <label class="input-label">Tax ID Label *</label>
+                <input type="text" id="cfgTaxLabel" class="input-field" placeholder="e.g. GSTIN, TRN, VAT No" oninput="updateSettingsLivePreview()" style="font-weight: 700;">
+              </div>
+              <div class="input-container">
+                <label class="input-label">Business Tax / Registration No. *</label>
+                <input type="text" id="cfgTaxNumber" class="input-field" placeholder="e.g. 07AAPCA1234F1Z5" oninput="updateSettingsLivePreview()" style="font-family: var(--font-mono); text-transform: uppercase; font-weight: 700;">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+              <div class="input-container">
+                <label class="input-label">Currency Symbol *</label>
+                <input type="text" id="cfgCurrencySymbol" class="input-field" placeholder="₹ or $" oninput="updateSettingsLivePreview()" style="font-size: 15px; font-weight: 800; color: #fbbf24; text-align: center;">
+              </div>
+              <div class="input-container">
+                <label class="input-label">Currency Code *</label>
+                <input type="text" id="cfgCurrencyCode" class="input-field" placeholder="INR or USD" oninput="updateSettingsLivePreview()" style="font-family: var(--font-mono); text-transform: uppercase; font-weight: 700; text-align: center;">
+              </div>
+              <div class="input-container">
+                <label class="input-label">Tax Engine State</label>
+                <select id="cfgTaxEnabled" class="input-field" onchange="updateSettingsLivePreview()" style="font-weight: 700;">
+                  <option value="1">Enabled (Calculate Tax)</option>
+                  <option value="0">Disabled (Zero Tax)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Workshop Business Profile -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 20px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 16px;">🏢</span>
+                <span style="font-size: 13.5px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 0.6px;">Workshop Business Identity</span>
+              </div>
+              <span style="font-size: 11px; color: var(--text-dim);">Printed on invoices & receipts</span>
+            </div>
+
+            <div class="input-container" style="margin-bottom: 12px;">
+              <label class="input-label">Official Garage / Workshop Name *</label>
+              <input type="text" id="cfgGarageName" class="input-field" placeholder="e.g. Apex Performance AutoCare" oninput="updateSettingsLivePreview()" style="font-size: 14px; font-weight: 800;">
+            </div>
+
+            <div class="input-container" style="margin-bottom: 12px;">
+              <label class="input-label">Business Tagline / Sub-title</label>
+              <input type="text" id="cfgTagline" class="input-field" placeholder="e.g. Premium Multi-Brand Auto Care & Detailing Studio" oninput="updateSettingsLivePreview()">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <div class="input-container">
+                <label class="input-label">Contact Phone / WhatsApp *</label>
+                <input type="text" id="cfgPhone" class="input-field" placeholder="+91 98765 43210" oninput="updateSettingsLivePreview()">
+              </div>
+              <div class="input-container">
+                <label class="input-label">Support Email *</label>
+                <input type="email" id="cfgEmail" class="input-field" placeholder="contact@apexauto.com" oninput="updateSettingsLivePreview()">
+              </div>
+            </div>
+
+            <div class="input-container" style="margin-bottom: 12px;">
+              <label class="input-label">Physical Workshop Address (For Tax Invoices) *</label>
+              <textarea id="cfgAddress" class="input-field" rows="2" placeholder="e.g. Plot 42, Motor Way Hub, Sector 18, Gurugram, India" oninput="updateSettingsLivePreview()"></textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px;">
+              <div class="input-container">
+                <label class="input-label">Invoice Prefix</label>
+                <input type="text" id="cfgInvoicePrefix" class="input-field" placeholder="INV" oninput="updateSettingsLivePreview()" style="font-family: var(--font-mono); text-transform: uppercase; font-weight: 800;">
+              </div>
+              <div class="input-container">
+                <label class="input-label">Invoice Footer Thank-You Note</label>
+                <input type="text" id="cfgFooterNotes" class="input-field" placeholder="Thank you for choosing Apex Performance AutoCare! Drive safe." oninput="updateSettingsLivePreview()">
+              </div>
+            </div>
+
+            <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: flex-end;">
+              <button class="btn-neo btn-neo-primary" onclick="saveGarageSettings()" id="btnSaveGarageSettingsBottom" style="padding: 10px 24px; font-weight: 800; font-size: 13px;">
+                ✓ Save Garage Profile & Tax Settings
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Live Interactive Tax Invoice & Thermal Receipt Preview -->
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 20px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 16px;">🧾</span>
+                <span style="font-size: 13px; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.6px;">Live Tax Invoice Thermal Slip</span>
+              </div>
+              <span class="pill pill-confirmed" style="font-size: 9.5px;">Auto-Updates</span>
+            </div>
+
+            <!-- Thermal Paper Container -->
+            <div class="thermal-paper" style="margin: 0; box-shadow: 0 8px 30px rgba(0,0,0,0.7); border: 1px solid rgba(212,175,55,0.25);">
+              
+              <!-- Header -->
+              <div style="text-align: center; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 8px; margin-bottom: 8px;">
+                <div style="font-size: 13px; font-weight: 900; color: #fbbf24; letter-spacing: 0.5px; text-transform: uppercase;" id="prevGarageName">APEX PERFORMANCE AUTOCARE</div>
+                <div style="font-size: 10px; color: var(--text-dim);" id="prevTagline">Premium Multi-Brand Auto Care & Detailing Studio</div>
+                <div style="font-size: 9.5px; color: var(--text-dim); margin-top: 3px;" id="prevAddress">Plot 42, Motor Way Hub, Sector 18, Gurugram, India</div>
+                <div style="font-size: 9.5px; color: var(--text-dim);" id="prevPhone">Ph: +91 98765 43210</div>
+                <div style="font-size: 10px; font-family: var(--font-mono); font-weight: 700; color: #34d399; margin-top: 4px;" id="prevTaxId">GSTIN: 07AAPCA1234F1Z5</div>
+                <div style="font-size: 11px; font-weight: 800; color: #fff; margin-top: 6px; letter-spacing: 0.5px;" id="prevInvoiceNum">TAX INVOICE: INV-1092</div>
+              </div>
+
+              <!-- Customer Meta -->
+              <div style="display: flex; justify-content: space-between; font-size: 10.5px; margin-bottom: 3px;">
+                <span style="color: var(--text-dim);">Customer:</span>
+                <span style="color: #fff; font-weight: 700;">Vikram Malhotra</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 10.5px; margin-bottom: 3px;">
+                <span style="color: var(--text-dim);">Vehicle & Reg:</span>
+                <span style="color: #fff; font-weight: 700;">BMW 330i M-Sport • DL-01-AB-1234</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 10.5px; margin-bottom: 6px;">
+                <span style="color: var(--text-dim);">Payment Mode:</span>
+                <span style="color: #fbbf24; font-weight: 800;">UPI QR / POS Terminal</span>
+              </div>
+
+              <!-- Itemized Breakdown -->
+              <div style="border-top: 1px dashed rgba(255,255,255,0.15); padding: 6px 0; font-size: 10.5px; display: flex; flex-direction: column; gap: 4px;">
+                <div style="display: flex; justify-content: space-between; color: #e2e8f0;">
+                  <span>1x Periodic Full Synthetic Service</span>
+                  <span style="font-family: var(--font-mono); font-weight: 700;" id="prevItemBasePrice">₹150.00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; color: #fbbf24;">
+                  <span>+ Synthetic Engine Oil Flush</span>
+                  <span style="font-family: var(--font-mono); font-weight: 700;" id="prevItemExtraPrice">₹45.00</span>
+                </div>
+              </div>
+
+              <!-- Subtotal & Country Tax Breakdown -->
+              <div style="border-top: 1px dashed rgba(255,255,255,0.18); padding-top: 6px; margin-top: 4px; display: flex; flex-direction: column; gap: 3px; font-size: 10.5px;">
+                <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
+                  <span>Taxable Subtotal:</span>
+                  <span style="font-family: var(--font-mono); font-weight: 700; color: #fff;" id="prevSubtotal">₹195.00</span>
+                </div>
+                <div id="prevTaxLines" style="display: flex; flex-direction: column; gap: 2px;">
+                  <div style="display: flex; justify-content: space-between; color: #34d399;">
+                    <span id="prevTaxLineLabel">CGST (9.0%):</span>
+                    <span style="font-family: var(--font-mono); font-weight: 700;" id="prevCgstAmount">₹17.55</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; color: #34d399;">
+                    <span>SGST (9.0%):</span>
+                    <span style="font-family: var(--font-mono); font-weight: 700;" id="prevSgstAmount">₹17.55</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Grand Total -->
+              <div style="border-top: 1px dashed rgba(255,255,255,0.25); padding-top: 6px; margin-top: 6px; display: flex; justify-content: space-between; align-items: baseline;">
+                <span style="font-size: 12px; font-weight: 800; color: #fff;">TOTAL PAID:</span>
+                <span style="font-size: 19px; font-weight: 900; color: #34d399; font-family: var(--font-mono);" id="prevGrandTotal">₹230.10</span>
+              </div>
+
+              <!-- Footer Note -->
+              <div style="text-align: center; margin-top: 12px; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 8px; font-size: 9.5px; color: var(--text-dim); line-height: 1.4;" id="prevFooterNotes">
+                Thank you for choosing Apex Performance AutoCare! Drive safe with confidence.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  <!-- MODAL: ADD NEW BOOKING (POPUP MODAL) -->
+  <div id="newBookingModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 880px; width: 95%;">
+      <div class="modal-head">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 14px; font-weight: 800; color: #fff;">Reserve Service Bay & Add Booking</span>
+          <span class="pill pill-confirmed">Instant Lock</span>
+        </div>
+        <button onclick="closeModal('newBookingModal')" style="border:none;background:none;color:var(--text-dim);cursor:pointer;font-size:18px;">&times;</button>
+      </div>
+      <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
+        <form id="publicBookingForm" onsubmit="handleCustomerBooking(event)">
+          
+          <!-- STEP 1: IDENTITY & VEHICLE -->
+          <div class="micro-step">
+            <span class="micro-step-num">1</span>
+            <span class="micro-step-text">CUSTOMER & VEHICLE DETAILS</span>
+          </div>
+
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">Customer Full Name *</label>
+              <input type="text" id="custName" class="input-field" placeholder="e.g. Rahul Sharma" required>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Mobile Number * (For SMS/WhatsApp Alert)</label>
+              <input type="tel" id="custPhone" class="input-field" placeholder="e.g. 9891234567" required>
+            </div>
+          </div>
+
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">Vehicle Registration Plate *</label>
+              <input type="text" id="custRegNumber" class="input-field" placeholder="DL-01-AB-1234" required style="text-transform: uppercase; font-family: var(--font-mono); font-weight: 700;">
+            </div>
+            <div class="input-container">
+              <label class="input-label">Car Model & Year *</label>
+              <input type="text" id="custVehicleName" class="input-field" placeholder="e.g. Hyundai Creta 1.5 (2022)" required>
+            </div>
+          </div>
+
+          <!-- STEP 2: SERVICE TIERS -->
+          <div class="micro-step" style="margin-top: 10px;">
+            <span class="micro-step-num">2</span>
+            <span class="micro-step-text">SERVICE PACKAGE</span>
+          </div>
+
+          <div class="service-cards-grid">
+            <div class="service-card-choice selected" onclick="selectServiceChoice(this, 'Periodic Full Service', 150)">
+              <div class="sc-name">Periodic Full Service</div>
+              <div class="sc-desc">Oil, filter & 40-pt inspect</div>
+            </div>
+            <div class="service-card-choice" onclick="selectServiceChoice(this, 'Brake & Suspension', 90)">
+              <div class="sc-name">Brake & Suspension</div>
+              <div class="sc-desc">Calipers & rotor check</div>
+            </div>
+            <div class="service-card-choice" onclick="selectServiceChoice(this, 'AC Recharge & Cooling', 120)">
+              <div class="sc-name">AC Recharge</div>
+              <div class="sc-desc">Gas refill & leak test</div>
+            </div>
+            <div class="service-card-choice" onclick="selectServiceChoice(this, 'Comprehensive Detailing', 200)">
+              <div class="sc-name">Deep Detailing</div>
+              <div class="sc-desc">Interior steam & wax</div>
+            </div>
+            <div class="service-card-choice" onclick="selectServiceChoice(this, 'Other', 100)">
+              <div class="sc-name">Other</div>
+              <div class="sc-desc">Custom repair & issues</div>
+            </div>
+          </div>
+          <input type="hidden" id="selectedServiceType" value="Periodic Full Service">
+          <input type="hidden" id="selectedServiceAmount" value="150">
+
+          <!-- INTERACTIVE ESTIMATED BUDGET SLIDER ($10 - $10,000) -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <div>
+                <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Customer Agreed Estimated Budget</span>
+                <div style="font-size: 10.5px; color: var(--text-dim); margin-top: 1px;">Use slider to agree on estimated budget range with customer</div>
+              </div>
+              
+              <!-- Direct Budget Numerical Input & Live Display -->
+              <div style="display: flex; align-items: center; gap: 4px; background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 6px; padding: 3px 8px;">
+                <span style="color: #fbbf24; font-weight: 800; font-family: var(--font-mono); font-size: 13px;">$</span>
+                <input type="number" id="budgetInputNumber" min="10" max="10000" step="10" value="150" 
+                       style="background: transparent; border: none; outline: none; color: #34d399; font-family: var(--font-mono); font-size: 15px; font-weight: 800; width: 72px;"
+                       oninput="handleBudgetNumberInput(this.value)">
+                <span style="font-size: 10px; color: var(--text-dim); text-transform: uppercase;">EST</span>
+              </div>
+            </div>
+            
+            <!-- Draggable HTML5 Range Slider -->
+            <div style="position: relative; margin: 8px 0;">
+              <input type="range" id="priceBudgetSlider" class="neo-budget-slider" min="10" max="10000" step="10" value="150" 
+                     oninput="handleBudgetSliderChange(this.value)">
+            </div>
+
+            <!-- Min, Quick Presets & Max -->
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; color: var(--text-dim); font-family: var(--font-mono); margin-top: 2px;">
+              <span style="color: var(--text-muted); font-weight: 700;">Min: $10</span>
+              <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                <button type="button" class="btn-preset-chip" onclick="setBudgetPreset(100)">$100</button>
+                <button type="button" class="btn-preset-chip" onclick="setBudgetPreset(250)">$250</button>
+                <button type="button" class="btn-preset-chip" onclick="setBudgetPreset(500)">$500</button>
+                <button type="button" class="btn-preset-chip" onclick="setBudgetPreset(1000)">$1,000</button>
+                <button type="button" class="btn-preset-chip" onclick="setBudgetPreset(2500)">$2,500</button>
+                <button type="button" class="btn-preset-chip" onclick="setBudgetPreset(5000)">$5,000</button>
+              </div>
+              <span style="color: var(--text-muted); font-weight: 700;">Max: $10,000</span>
+            </div>
+          </div>
+
+          <!-- STEP 3: SERVICE REQUIREMENTS & HEALTH CHECKLIST -->
+          <div class="extras-row" style="margin-bottom: 12px;">
+            <div class="chips-checklist">
+              <label class="custom-checkbox"><input type="checkbox" id="q_pickup"> Doorstep Pickup</label>
+              <label class="custom-checkbox"><input type="checkbox" id="q_oil" checked> Replace Engine Oil</label>
+              <label class="custom-checkbox"><input type="checkbox" id="q_wheel"> Wheel Alignment</label>
+              <label class="custom-checkbox"><input type="checkbox" id="q_ac"> AC Cooling Test</label>
+              <label class="custom-checkbox"><input type="checkbox" id="q_washing"> Foam Washing & Vacuum</label>
+              <label class="custom-checkbox"><input type="checkbox" id="q_repair"> General Repair</label>
+              <label class="custom-checkbox"><input type="checkbox" id="q_brakes"> Brake Inspection</label>
+              <label class="custom-checkbox"><input type="checkbox" id="q_battery"> Battery Health Check</label>
+            </div>
+            <div class="input-container">
+              <textarea id="custIssue" class="input-field" placeholder="Symptoms / customer complaints..." style="height: 100%; min-height: 90px; resize: none;"></textarea>
+            </div>
+          </div>
+
+          <!-- STEP 4: SCHEDULE DATE & LIVE BAY SLOTS -->
+          <div class="schedule-cluster" style="margin-bottom: 14px;">
+            <div class="input-container">
+              <label class="input-label">Appointment Date *</label>
+              <input type="date" id="custBookingDate" class="input-field" onchange="fetchSlotsForDate(this.value)" required>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Select Available Bay Slot *</label>
+              <div id="slotsPillContainer" class="time-slots-grid">
+                <span style="font-size: 11px; color: var(--text-dim);">Select date first...</span>
+              </div>
+              <input type="hidden" id="selectedTimeSlot" required>
+            </div>
+          </div>
+
+          <!-- SUMMARY STRIP IN MODAL -->
+          <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 11px; color: var(--text-dim);">Selected Package: <strong id="summaryServiceName" style="color: #fff;">Periodic Full Service</strong></div>
+              <div style="font-size: 11px; color: var(--text-dim);">Slot: <strong id="summaryServiceSlot" style="color: #38bdf8;">Pick a slot</strong></div>
+            </div>
+            <div style="font-size: 18px; font-weight: 800; color: #34d399; font-family: var(--font-mono);" id="summaryServicePrice">$149</div>
+          </div>
+
+          <div class="modal-foot" style="padding: 0; background: none; border: none;">
+            <button type="button" class="btn-neo btn-neo-secondary" onclick="closeModal('newBookingModal')">Cancel</button>
+            <button type="submit" class="btn-glow" style="width: auto; padding: 8px 18px;">
+              Confirm Bay Slot & Send Alert
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALS WITH GLASSMORPHIC MICRO-UX -->
+
+  <!-- MODAL: MODERN TACTILE POS PAYMENT & SETTLEMENT -->
+  <div id="paymentVerifyModal" class="modal-overlay">
+    <div class="modal-box payment-modal-box">
+      <div class="modal-head" style="border-bottom: 1px solid rgba(212, 175, 55, 0.25);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.4); display: flex; align-items: center; justify-content: center; color: #fbbf24; font-size: 14px;">💳</div>
+          <div>
+            <span style="font-size: 14px; font-weight: 800; color: #fff;">Settle Payment & Release Vehicle</span>
+            <div style="font-size: 10.5px; color: var(--text-dim);">Live Garage Checkout Counter</div>
+          </div>
+        </div>
+        <button onclick="cancelPaymentModal()" style="border:none;background:none;color:var(--text-dim);cursor:pointer;font-size:20px;">&times;</button>
+      </div>
+
+      <div class="modal-content" style="padding: 16px;">
+        <input type="hidden" id="payBookingId">
+        <input type="hidden" id="payTargetStatus" value="Completed">
+        <input type="hidden" id="selectedPaymentMethod" value="Cash">
+
+        <!-- Bill Breakdown Card -->
+        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="font-size: 11px; color: var(--text-dim);">Booking & Work Order:</span>
+            <span id="payModalBookingRef" style="font-size: 12px; font-weight: 800; color: #fbbf24; font-family: var(--font-mono);">BK-0000</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="font-size: 11px; color: var(--text-dim);">Client & Vehicle:</span>
+            <span id="payModalClientVehicle" style="font-size: 12px; font-weight: 700; color: #fff;">-</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="font-size: 11px; color: var(--text-dim);">Base Service Tier:</span>
+            <span id="payModalBaseAmount" style="font-size: 12px; font-weight: 700; color: #e2e8f0; font-family: var(--font-mono);">$0.00</span>
+          </div>
+
+          <!-- Extra parts dynamically added -->
+          <div id="additionalItemsContainer" style="display: flex; flex-direction: column; gap: 4px; margin: 6px 0;"></div>
+
+          <div style="display: flex; justify-content: space-between; margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,0.08);">
+            <span style="font-size: 11px; color: var(--text-dim);">Subtotal:</span>
+            <span id="payModalSubtotal" style="font-size: 12px; font-weight: 700; color: #fff; font-family: var(--font-mono);">$0.00</span>
+          </div>
+          <div id="payModalTaxRow" style="display: flex; justify-content: space-between; margin-top: 3px;">
+            <span id="payModalTaxLabel" style="font-size: 11px; color: #34d399;">Tax (GST 18%):</span>
+            <span id="payModalTaxAmount" style="font-size: 12px; font-weight: 700; color: #34d399; font-family: var(--font-mono);">$0.00</span>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 8px; margin-top: 6px; align-items: baseline;">
+            <span style="font-size: 12px; color: #fff; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">Net Payable:</span>
+            <span id="payModalAmount" style="font-size: 22px; font-weight: 900; color: #34d399; font-family: var(--font-mono);">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Quick 1-Tap Spares & Labor Addition -->
+        <div style="background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.25); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 10.5px; font-weight: 800; color: #fbbf24; text-transform: uppercase;">1-Tap Quick Spares & Extra Work</span>
+            <span style="font-size: 10px; color: var(--text-dim);">Tap to add to bill</span>
+          </div>
+          
+          <div class="quick-spares-wrap">
+            <span class="quick-spare-pill" onclick="quickAddSpare('Wiper Blades (Pair)', 20)">+ Wiper Blades ($20)</span>
+            <span class="quick-spare-pill" onclick="quickAddSpare('Coolant Top-up (1L)', 15)">+ Coolant ($15)</span>
+            <span class="quick-spare-pill" onclick="quickAddSpare('Synthetic Brake Fluid', 25)">+ Brake Fluid ($25)</span>
+            <span class="quick-spare-pill" onclick="quickAddSpare('Front Brake Pads', 60)">+ Brake Pads ($60)</span>
+            <span class="quick-spare-pill" onclick="quickAddSpare('Engine Oil Flush (Add-on)', 45)">+ Oil Flush ($45)</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 90px 75px; gap: 6px; margin-top: 8px;">
+            <input type="text" id="extraItemName" class="input-field" placeholder="Custom part / labor..." style="padding: 6px 8px; font-size: 11.5px;">
+            <input type="number" id="extraItemPrice" class="input-field" placeholder="Price ($)" style="padding: 6px 8px; font-size: 11.5px;">
+            <button type="button" class="btn-neo btn-neo-primary" style="padding: 6px; font-size: 11px; justify-content: center; font-weight: 800;" onclick="addExtraBillItem()">
+              + Add
+            </button>
+          </div>
+        </div>
+
+        <!-- Visual Payment Method Cards -->
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 11px; font-weight: 800; color: #fbbf24; text-transform: uppercase; display: block; margin-bottom: 6px;">
+            Choose Payment Method
+          </label>
+          <div class="payment-method-grid">
+            <div class="pay-method-card active" id="payCard-Cash" onclick="selectPaymentMethod('Cash')">
+              <div class="pay-method-icon">💵</div>
+              <div class="pay-method-title">Cash</div>
+              <div class="pay-method-sub">Counter Tender</div>
+            </div>
+            <div class="pay-method-card" id="payCard-Card" onclick="selectPaymentMethod('Card')">
+              <div class="pay-method-icon">💳</div>
+              <div class="pay-method-title">Card / POS</div>
+              <div class="pay-method-sub">Tap & Swipe</div>
+            </div>
+            <div class="pay-method-card" id="payCard-UPI" onclick="selectPaymentMethod('UPI')">
+              <div class="pay-method-icon">📱</div>
+              <div class="pay-method-title">UPI / QR</div>
+              <div class="pay-method-sub">Instant Scan</div>
+            </div>
+            <div class="pay-method-card" id="payCard-Fleet" onclick="selectPaymentMethod('Fleet')">
+              <div class="pay-method-icon">🏢</div>
+              <div class="pay-method-title">Fleet / Cheque</div>
+              <div class="pay-method-sub">Net-30 / PO</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Context-Sensitive Panels -->
+        <!-- PANEL 1: CASH WITH INSTANT CHANGE CALCULATOR -->
+        <div id="payPanel-Cash" class="pay-panel show">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="font-size: 11px; color: var(--text-dim); font-weight: 700;">Cash Tendered / Received ($):</label>
+            <div style="display: flex; gap: 4px;">
+              <button type="button" class="denom-btn" onclick="applyTenderedAmount('exact')">Exact</button>
+              <button type="button" class="denom-btn" onclick="applyTenderedAmount(50)">+$50</button>
+              <button type="button" class="denom-btn" onclick="applyTenderedAmount(100)">+$100</button>
+            </div>
+          </div>
+          <input type="number" id="payCashTendered" class="input-field" placeholder="0.00" oninput="calculateCashChange()" style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); color: #fbbf24;">
+
+          <div class="change-indicator-box">
+            <span style="font-size: 12px; font-weight: 700; color: #a7f3d0;">Change to Return:</span>
+            <span id="payChangeReturnDisplay" style="font-size: 18px; font-weight: 900; color: #34d399; font-family: var(--font-mono);">$0.00</span>
+          </div>
+        </div>
+
+        <!-- PANEL 2: CARD / POS MACHINE -->
+        <div id="payPanel-Card" class="pay-panel">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px;">
+            <div>
+              <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px;">Card Network</label>
+              <select id="payCardBrand" class="input-field" style="font-size: 12px;">
+                <option value="Visa">Visa Card</option>
+                <option value="Mastercard">Mastercard</option>
+                <option value="RuPay">RuPay Debit/Credit</option>
+                <option value="Amex">American Express</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px;">Card Last 4 Digits</label>
+              <input type="text" id="payCardLast4" class="input-field" maxlength="4" placeholder="e.g. 4821" style="font-family: var(--font-mono); font-weight: 700;">
+            </div>
+          </div>
+          <div>
+            <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px;">POS Terminal Auth Code / Slip No.</label>
+            <input type="text" id="payCardAuth" class="input-field" placeholder="e.g. AUTH-779812 or Slip #94" style="font-size: 12px;">
+          </div>
+        </div>
+
+        <!-- PANEL 3: UPI / DYNAMIC QR CODE -->
+        <div id="payPanel-UPI" class="pay-panel">
+          <div style="display: flex; align-items: center; gap: 14px; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.06);">
+            <!-- Mock Animated UPI QR Code -->
+            <div style="width: 80px; height: 80px; background: #fff; border-radius: 8px; padding: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="72" height="72" viewBox="0 0 100 100">
+                <rect width="100" height="100" fill="white" />
+                <!-- Position Detection Patterns -->
+                <rect x="5" y="5" width="30" height="30" fill="black" />
+                <rect x="10" y="10" width="20" height="20" fill="white" />
+                <rect x="15" y="15" width="10" height="10" fill="black" />
+                <rect x="65" y="5" width="30" height="30" fill="black" />
+                <rect x="70" y="10" width="20" height="20" fill="white" />
+                <rect x="75" y="15" width="10" height="10" fill="black" />
+                <rect x="5" y="65" width="30" height="30" fill="black" />
+                <rect x="10" y="70" width="20" height="20" fill="white" />
+                <rect x="15" y="75" width="10" height="10" fill="black" />
+                <!-- Data Blocks -->
+                <rect x="42" y="10" width="16" height="8" fill="black" />
+                <rect x="42" y="24" width="16" height="8" fill="black" />
+                <rect x="10" y="42" width="25" height="16" fill="black" />
+                <rect x="42" y="42" width="16" height="16" fill="#fbbf24" />
+                <rect x="65" y="42" width="25" height="10" fill="black" />
+                <rect x="42" y="65" width="10" height="25" fill="black" />
+                <rect x="60" y="65" width="30" height="25" fill="black" />
+              </svg>
+            </div>
+            <div>
+              <div style="font-size: 12px; font-weight: 800; color: #fff;">Scan & Pay via any UPI App</div>
+              <div style="font-size: 10.5px; color: var(--text-dim); margin: 2px 0 6px 0;">Google Pay • PhonePe • Paytm • Cred</div>
+              <div style="font-size: 11px; font-family: var(--font-mono); color: #fbbf24; font-weight: 700;">VPA: autocare.garage@icici</div>
+            </div>
+          </div>
+          <div style="margin-top: 10px;">
+            <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px;">UPI UTR / Reference ID (Optional)</label>
+            <input type="text" id="payUpiRef" class="input-field" placeholder="e.g. 429188291044" style="font-family: var(--font-mono); font-size: 12px;">
+          </div>
+        </div>
+
+        <!-- PANEL 4: FLEET / CHEQUE -->
+        <div id="payPanel-Fleet" class="pay-panel">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px;">Company Fleet Account</label>
+              <input type="text" id="payFleetCompany" class="input-field" placeholder="e.g. Uber / Avis Fleet" style="font-size: 12px;">
+            </div>
+            <div>
+              <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 4px;">PO / Cheque Number</label>
+              <input type="text" id="payFleetPo" class="input-field" placeholder="e.g. CHQ-99014" style="font-size: 12px; font-family: var(--font-mono);">
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+          <button type="button" class="btn-neo btn-neo-secondary" onclick="cancelPaymentModal()">
+            Cancel / Pending
+          </button>
+          <button type="button" id="paySubmitBtn" class="btn-neo btn-neo-primary" style="padding: 10px 24px; font-size: 13.5px; font-weight: 900; box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);" onclick="confirmPaymentAndComplete()">
+            ✓ Settle & Complete Job
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CELEBRATORY POST-PAYMENT RECEIPT & INVOICE MODAL -->
+  <div id="paymentReceiptModal" class="modal-overlay">
+    <div class="modal-box receipt-modal-box">
+      <div style="text-align: center; padding: 20px 20px 10px 20px;">
+        <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); border: 2px solid #34d399; margin: 0 auto 10px auto; display: flex; align-items: center; justify-content: center; color: #34d399; font-size: 24px; font-weight: 900; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);">
+          ✓
+        </div>
+        <div style="font-size: 16px; font-weight: 900; color: #fff;">Payment Verified & Job Completed!</div>
+        <div style="font-size: 11.5px; color: #34d399; margin-top: 3px; font-weight: 700;">Vehicle cleared for customer release</div>
+      </div>
+
+      <div class="modal-content" style="padding: 0 20px 20px 20px;">
+        <!-- Workshop Thermal Slip -->
+        <div class="thermal-paper">
+          <div style="text-align: center; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 8px; margin-bottom: 10px;">
+            <div style="font-size: 13px; font-weight: 900; color: #fbbf24; letter-spacing: 0.5px; text-transform: uppercase;" id="receiptGarageName">APEX PERFORMANCE AUTOCARE</div>
+            <div style="font-size: 9.5px; color: var(--text-dim);" id="receiptTagline">Premium Multi-Brand Auto Care</div>
+            <div style="font-size: 9px; color: var(--text-dim); margin-top: 2px;" id="receiptAddress">Plot 42, Motor Way Hub, Sector 18, Gurugram</div>
+            <div style="font-size: 9px; color: var(--text-dim);" id="receiptPhone">Ph: +91 98765 43210</div>
+            <div style="font-size: 9.5px; font-family: var(--font-mono); font-weight: 700; color: #34d399; margin-top: 3px;" id="receiptTaxId">GSTIN: 07AAPCA1234F1Z5</div>
+            <div style="font-size: 9.5px; color: var(--text-dim); margin-top: 4px;" id="receiptDate">Date: Today</div>
+            <div style="font-size: 11.5px; font-weight: 800; color: #fff; margin-top: 3px; font-family: var(--font-mono);" id="receiptInvoiceNum">TAX INVOICE: INV-0000</div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px;">
+            <span style="color: var(--text-dim);">Customer:</span>
+            <span id="receiptCustomerName" style="color: #fff; font-weight: 700;">-</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px;">
+            <span style="color: var(--text-dim);">Vehicle & Reg:</span>
+            <span id="receiptVehicleReg" style="color: #fff; font-weight: 700;">-</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 8px;">
+            <span style="color: var(--text-dim);">Payment Mode:</span>
+            <span id="receiptPaymentMode" style="color: #fbbf24; font-weight: 800;">Cash</span>
+          </div>
+
+          <div id="receiptItemsBreakdown" style="border-top: 1px dashed rgba(255,255,255,0.15); padding: 6px 0; font-size: 11px; display: flex; flex-direction: column; gap: 4px;">
+            <!-- Dynamically populated items -->
+          </div>
+
+          <!-- Subtotal & Tax Breakdown -->
+          <div id="receiptTaxBreakdownSection" style="border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 6px; margin-top: 4px; display: flex; flex-direction: column; gap: 3px; font-size: 10.5px;">
+            <div style="display: flex; justify-content: space-between; color: var(--text-dim);">
+              <span>Taxable Subtotal:</span>
+              <span style="font-family: var(--font-mono); font-weight: 700; color: #fff;" id="receiptSubtotalAmount">$0.00</span>
+            </div>
+            <div id="receiptTaxRowsContainer" style="display: flex; flex-direction: column; gap: 2px;">
+              <!-- Dynamic CGST/SGST or VAT lines -->
+            </div>
+          </div>
+
+          <div style="border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 8px; margin-top: 6px; display: flex; justify-content: space-between; align-items: baseline;">
+            <span style="font-size: 12px; font-weight: 800; color: #fff;">TOTAL PAID:</span>
+            <span id="receiptTotalAmount" style="font-size: 20px; font-weight: 900; color: #34d399;">$0.00</span>
+          </div>
+
+          <div id="receiptChangeRow" style="display: none; justify-content: space-between; font-size: 10.5px; color: #a7f3d0; margin-top: 4px;">
+            <span>Change Returned:</span>
+            <span id="receiptChangeAmount" style="font-weight: 700;">$0.00</span>
+          </div>
+
+          <!-- Thermal Footer -->
+          <div style="text-align: center; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 8px; margin-top: 10px; font-size: 9.5px; color: var(--text-dim); line-height: 1.4;" id="receiptFooterNotes">
+            Thank you for choosing Apex Performance AutoCare! Drive safe with confidence.
+          </div>
+        </div>
+
+        <!-- Action Row -->
+        <div style="display: flex; gap: 8px; flex-direction: column;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <button type="button" class="btn-neo btn-neo-secondary" onclick="printReceiptSlip()" style="justify-content: center; padding: 9px; font-weight: 800; font-size: 12px;">
+              🖨️ Print Receipt
+            </button>
+            <button type="button" class="btn-neo btn-neo-secondary" onclick="shareReceiptWhatsApp()" style="justify-content: center; padding: 9px; font-weight: 800; font-size: 12px; color: #25d366; border-color: rgba(37, 211, 102, 0.4);">
+              💬 WhatsApp Bill
+            </button>
+          </div>
+          <button type="button" class="btn-neo btn-neo-primary" onclick="closeReceiptModal()" style="justify-content: center; padding: 10px; font-weight: 900; font-size: 13px;">
+            ✓ Done & Return to Queue
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT SERVICE RATE CARD ITEM -->
+  <div id="rateCardModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 490px;">
+      <div class="modal-head">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 13.5px; font-weight: 800; color: #fff;" id="rateCardModalTitle">Configure Service Rate</span>
+          <span class="pill pill-confirmed">Pricing Master</span>
+        </div>
+        <button onclick="closeModal('rateCardModal')" style="border:none;background:none;color:var(--text-dim);cursor:pointer;font-size:18px;">&times;</button>
+      </div>
+      <div class="modal-content" style="padding: 18px;">
+        <form id="rateCardForm" onsubmit="submitRateCardForm(event)">
+          <input type="hidden" id="rcItemId">
+
+          <div class="input-container" style="margin-bottom: 12px;">
+            <label class="input-label">Service Package / Job Name *</label>
+            <input type="text" id="rcServiceName" class="input-field" placeholder="e.g. Foam Washing & Vacuum" required style="font-weight: 700;">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px; margin-bottom: 12px;">
+            <div class="input-container">
+              <label class="input-label">Category *</label>
+              <select id="rcCategory" class="input-field" required>
+                <option value="Cleaning & Wash">Cleaning & Wash</option>
+                <option value="Fluids & Lubricants">Fluids & Lubricants</option>
+                <option value="Periodic Service">Periodic Service</option>
+                <option value="Detailing">Detailing</option>
+                <option value="Mechanical & Brakes">Mechanical & Brakes</option>
+                <option value="AC & Electrical">AC & Electrical</option>
+              </select>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Standard Base Price ($) *</label>
+              <input type="number" step="0.01" id="rcBasePrice" class="input-field" placeholder="35.00" required style="font-family: var(--font-mono); font-weight: 800; color: #34d399; font-size: 15px;">
+            </div>
+          </div>
+
+          <div class="input-container" style="margin-bottom: 12px;">
+            <label class="input-label">Estimated Bay Time (Minutes)</label>
+            <input type="number" id="rcTimeMins" class="input-field" placeholder="45" value="45" style="font-family: var(--font-mono);">
+          </div>
+
+          <div class="input-container" style="margin-bottom: 16px;">
+            <label class="input-label">Scope of Work / What's Included</label>
+            <textarea id="rcDescription" class="input-field" rows="3" placeholder="Explain what is included in this service (e.g. pressure wash, underbody clean, tire polish)..."></textarea>
+          </div>
+
+          <div class="modal-foot" style="padding: 0; background: none; border: none; display: flex; justify-content: flex-end; gap: 8px;">
+            <button type="button" class="btn-neo btn-neo-secondary" onclick="closeModal('rateCardModal')">Cancel</button>
+            <button type="submit" class="btn-neo btn-neo-primary" style="padding: 8px 20px; font-weight: 800;">
+              💾 Save Service Rate
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Reschedule / Move to Tomorrow -->
+  <div id="rescheduleModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-head">
+        <span style="font-size: 13px; font-weight: 700; color: #fff;">Shift Appointment / Move Date</span>
+        <button onclick="closeModal('rescheduleModal')" style="border:none;background:none;color:var(--text-dim);cursor:pointer;font-size:18px;">&times;</button>
+      </div>
+      <div class="modal-content">
+        <input type="hidden" id="rescheduleBookingId">
+        <div class="input-container" style="margin-bottom: 10px;">
+          <label class="input-label">Booking Reference:</label>
+          <div id="rescheduleBookingInfo" style="font-weight: 700; color: #fbbf24; font-family: var(--font-mono);"></div>
+        </div>
+        <div class="input-container" style="margin-bottom: 10px;">
+          <label class="input-label">New Target Date *</label>
+          <input type="date" id="rescheduleDate" class="input-field" required>
+        </div>
+        <div class="input-container">
+          <label class="input-label">Reason for Rescheduling</label>
+          <input type="text" id="rescheduleReason" class="input-field" placeholder="Client unavailable today, requested tomorrow morning">
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-neo btn-neo-secondary" onclick="closeModal('rescheduleModal')">Cancel</button>
+        <button class="btn-neo btn-neo-primary" onclick="submitReschedule()">Confirm Shift</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Add Inventory Component -->
+  <div id="addPartModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-head">
+        <span style="font-size: 13px; font-weight: 700; color: #fff;">Add Component to Inventory</span>
+        <button onclick="closeModal('addPartModal')" style="border:none;background:none;color:var(--text-dim);cursor:pointer;font-size:18px;">&times;</button>
+      </div>
+      <div class="modal-content">
+        <form id="addPartForm" onsubmit="submitNewPart(event)">
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">SKU Code *</label>
+              <input type="text" id="partSku" class="input-field" placeholder="e.g. BRK-PAD-102" required>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Category *</label>
+              <select id="partCategory" class="input-field" required>
+                <option value="Fluids & Lubricants">Fluids & Lubricants</option>
+                <option value="Brake System">Brake System</option>
+                <option value="Filters">Filters</option>
+                <option value="Ignition">Ignition</option>
+                <option value="Suspension">Suspension</option>
+                <option value="Accessories">Accessories</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-container" style="margin-bottom: 8px;">
+            <label class="input-label">Part Name *</label>
+            <input type="text" id="partName" class="input-field" placeholder="e.g. Bosch Front Ceramic Brake Pads" required>
+          </div>
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">Initial Stock *</label>
+              <input type="number" id="partStock" class="input-field" value="10" required>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Safety Threshold *</label>
+              <input type="number" id="partMin" class="input-field" value="5" required>
+            </div>
+          </div>
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">Unit Cost ($) *</label>
+              <input type="number" id="partCost" class="input-field" placeholder="35" required>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Selling Price ($) *</label>
+              <input type="number" id="partPrice" class="input-field" placeholder="65" required>
+            </div>
+          </div>
+          <div class="input-container" style="margin-bottom: 12px;">
+            <label class="input-label">Shelf / Rack Location</label>
+            <input type="text" id="partLocation" class="input-field" placeholder="Rack B-1">
+          </div>
+          <div class="modal-foot" style="padding: 0; background: none; border: none;">
+            <button type="button" class="btn-neo btn-neo-secondary" onclick="closeModal('addPartModal')">Cancel</button>
+            <button type="submit" class="btn-neo btn-neo-primary">Save to Stock</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Record Expense (Enlarged Form with Dynamic Vendor Selection) -->
+  <div id="addExpenseModal" class="modal-overlay">
+    <div class="modal-box large-modal">
+      <div class="modal-head">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 6px; padding: 4px 7px; color: #fbbf24; display: flex; align-items: center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          <div>
+            <div style="font-size: 14px; font-weight: 800; color: #fff;">Record Operating Outflow & Vendor Bill</div>
+            <div style="font-size: 11px; color: var(--text-dim);">Log shop overheads, spares invoices, or supplier payments</div>
+          </div>
+        </div>
+        <button onclick="closeModal('addExpenseModal')" style="border:none;background:none;color:var(--text-dim);cursor:pointer;font-size:20px;line-height:1;">&times;</button>
+      </div>
+      <div class="modal-content">
+        <form id="addExpenseForm" onsubmit="submitNewExpense(event)">
+          <div class="input-container" style="margin-bottom: 10px;">
+            <label class="input-label">Description / Reason *</label>
+            <input type="text" id="expTitle" class="input-field" placeholder="e.g. Diagnostic OBD Scanner maintenance / Brake pads bulk order" required>
+          </div>
+
+          <div class="grid-2col" style="margin-bottom: 10px;">
+            <div class="input-container">
+              <label class="input-label">Expense Category *</label>
+              <select id="expCategory" class="input-field" required>
+                <option value="Rent">Workshop Rent</option>
+                <option value="Electricity">Commercial Utilities</option>
+                <option value="Parts Purchase">Parts Purchase</option>
+                <option value="Tools">Tools & Equipment</option>
+                <option value="Salaries">Staff Payroll</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+              </select>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Outflow Amount ($) *</label>
+              <input type="number" id="expAmount" step="0.01" class="input-field" placeholder="150.00" required>
+            </div>
+          </div>
+
+          <!-- Vendor / Supplier Section (Checkbox Toggle) -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12.5px; font-weight: 700; color: #fff;">
+                <input type="checkbox" id="expenseHasVendor" onchange="toggleExpenseVendorDropdown(this.checked)" style="width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer;">
+                <span>Vendor / Supplier Available?</span>
+              </label>
+              <span style="font-size: 11px; color: var(--text-dim);">Enable to link this bill to a vendor</span>
+            </div>
+            
+            <div id="expenseVendorFieldWrapper" style="opacity: 0.4; pointer-events: none; transition: all 0.2s ease;">
+              <label class="input-label" style="display: flex; justify-content: space-between;">
+                <span>Select Registered Vendor</span>
+                <span style="color: #fbbf24; font-size: 10.5px;">Auto-populates company records</span>
+              </label>
+              <select id="expVendorSelect" class="input-field" disabled>
+                <option value="">-- Choose Vendor / Supplier --</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-2col" style="margin-bottom: 10px;">
+            <div class="input-container">
+              <label class="input-label">Transaction Date *</label>
+              <input type="date" id="expDate" class="input-field" required>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Payment Mode *</label>
+              <select id="expMode" class="input-field">
+                <option value="Direct ACH">Direct ACH / Wire</option>
+                <option value="Credit Card">Credit Card</option>
+                <option value="Check">Check</option>
+                <option value="Cash">Cash</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="input-container" style="margin-bottom: 14px;">
+            <label class="input-label">Invoice / Bill Reference Number</label>
+            <input type="text" id="expNotes" class="input-field" placeholder="e.g. Bill #INV-92810 / Spares Receipt">
+          </div>
+
+          <div class="modal-foot" style="padding: 0; background: none; border: none; display: flex; justify-content: flex-end; gap: 8px;">
+            <button type="button" class="btn-neo btn-neo-secondary" onclick="closeModal('addExpenseModal')">Cancel</button>
+            <button type="submit" class="btn-neo btn-neo-primary" style="padding: 9px 18px; font-weight: 800;">Record Outflow</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Add Staff Member -->
+  <div id="addStaffModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-head">
+        <span style="font-size: 13px; font-weight: 700; color: #fff;">Add Crew Member</span>
+        <button onclick="closeModal('addStaffModal')" style="border:none;background:none;color:var(--text-dim);cursor:pointer;font-size:18px;">&times;</button>
+      </div>
+      <div class="modal-content">
+        <form id="addStaffForm" onsubmit="submitNewStaff(event)">
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">Full Name *</label>
+              <input type="text" id="staffName" class="input-field" placeholder="e.g. Michael Scott" required>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Role *</label>
+              <select id="staffRole" class="input-field" required>
+                <option value="Chief Mechanic">Chief Mechanic</option>
+                <option value="Auto Electrician">Auto Electrician</option>
+                <option value="Technician">Service Technician</option>
+                <option value="Service Advisor">Service Advisor</option>
+                <option value="Washer & Detailer">Washer & Detailer</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">Phone *</label>
+              <input type="tel" id="staffPhone" class="input-field" placeholder="+1 (555) 000-1122" required>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Monthly Salary ($)</label>
+              <input type="number" id="staffSalary" class="input-field" placeholder="4500">
+            </div>
+          </div>
+          <div class="input-container" style="margin-bottom: 12px;">
+            <label class="input-label">Core Competencies</label>
+            <input type="text" id="staffSkills" class="input-field" placeholder="Engine diagnostics, Brake rotors, ECU tuning">
+          </div>
+          <div class="modal-foot" style="padding: 0; background: none; border: none;">
+            <button type="button" class="btn-neo btn-neo-secondary" onclick="closeModal('addStaffModal')">Cancel</button>
+            <button type="submit" class="btn-neo btn-neo-primary">Save Member</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Add Vendor -->
+  <div id="addVendorModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-head">
+        <span style="font-size: 13px; font-weight: 700; color: #fff;">Register Supplier</span>
+        <button onclick="closeModal('addVendorModal')" style="border:none;background:none;color:var(--text-dim);cursor:pointer;font-size:18px;">&times;</button>
+      </div>
+      <div class="modal-content">
+        <form id="addVendorForm" onsubmit="submitNewVendor(event)">
+          <div class="input-container" style="margin-bottom: 8px;">
+            <label class="input-label">Company / Distributor Name *</label>
+            <input type="text" id="vendorCompany" class="input-field" placeholder="e.g. TVS Girling Spares Agency" required>
+          </div>
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">Contact Person *</label>
+              <input type="text" id="vendorContact" class="input-field" placeholder="e.g. Alok Roy" required>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Phone Number *</label>
+              <input type="tel" id="vendorPhone" class="input-field" placeholder="9810011223" required>
+            </div>
+          </div>
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">Email Address *</label>
+              <input type="email" id="vendorEmail" class="input-field" placeholder="contact@supplier.com" required>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Category</label>
+              <input type="text" id="vendorCategory" class="input-field" placeholder="Clutch & Brake Components">
+            </div>
+          </div>
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">GSTIN / Tax ID</label>
+              <input type="text" id="vendorGst" class="input-field" placeholder="07AAAAA0000A1Z5">
+            </div>
+            <div class="input-container">
+              <label class="input-label">Initial Payable Balance ($)</label>
+              <input type="number" id="vendorBalance" class="input-field" placeholder="0" value="0">
+            </div>
+          </div>
+          <div class="modal-foot" style="padding: 0; background: none; border: none; margin-top: 12px;">
+            <button type="button" class="btn-neo btn-neo-secondary" onclick="closeModal('addVendorModal')">Cancel</button>
+            <button type="submit" class="btn-neo btn-neo-primary">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Edit Vendor -->
+  <div id="editVendorModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-head">
+        <span style="font-size: 13px; font-weight: 700; color: #fff;">Edit Supplier Details</span>
+        <button onclick="closeModal('editVendorModal')" style="border:none;background:none;color:var(--text-dim);cursor:pointer;font-size:18px;">&times;</button>
+      </div>
+      <div class="modal-content">
+        <form id="editVendorForm" onsubmit="submitEditVendor(event)">
+          <input type="hidden" id="editVendorId">
+          <div class="input-container" style="margin-bottom: 8px;">
+            <label class="input-label">Company / Distributor Name *</label>
+            <input type="text" id="editVendorCompany" class="input-field" required>
+          </div>
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">Contact Person *</label>
+              <input type="text" id="editVendorContact" class="input-field" required>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Phone Number *</label>
+              <input type="tel" id="editVendorPhone" class="input-field" required>
+            </div>
+          </div>
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">Email Address *</label>
+              <input type="email" id="editVendorEmail" class="input-field" required>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Category</label>
+              <input type="text" id="editVendorCategory" class="input-field">
+            </div>
+          </div>
+          <div class="grid-2col">
+            <div class="input-container">
+              <label class="input-label">GSTIN / Tax ID</label>
+              <input type="text" id="editVendorGst" class="input-field">
+            </div>
+            <div class="input-container">
+              <label class="input-label">Payable Balance ($)</label>
+              <input type="number" id="editVendorBalance" class="input-field" step="any">
+            </div>
+          </div>
+          <div class="modal-foot" style="padding: 0; background: none; border: none; margin-top: 12px;">
+            <button type="button" class="btn-neo btn-neo-secondary" onclick="closeModal('editVendorModal')">Cancel</button>
+            <button type="submit" class="btn-neo btn-neo-primary">Update Supplier</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- CELEBRATION BOOKING SUCCESS MODAL -->
+  <div id="bookingConfirmedModal" class="modal-overlay">
+    <div class="success-modal-card">
+      <div class="success-icon-ring">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <span class="success-pill-tag">Bay Reserved Successfully</span>
+      <h2 style="font-size: 19px; font-weight: 800; color: #fff; margin-bottom: 4px;">Service Slot Confirmed!</h2>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Your appointment is locked in the system and dispatched to workshop crew.</p>
+
+      <div class="booking-ticket-summary">
+        <div class="ticket-row">
+          <span class="ticket-label">Booking Reference:</span>
+          <span class="ticket-val" id="modalBookingRef" style="color: #fbbf24; font-family: var(--font-mono);">BK-0000</span>
+        </div>
+        <div class="ticket-row">
+          <span class="ticket-label">Client Name:</span>
+          <span class="ticket-val" id="modalClientName">-</span>
+        </div>
+        <div class="ticket-row">
+          <span class="ticket-label">Vehicle & Plate:</span>
+          <span class="ticket-val" id="modalVehicleInfo">-</span>
+        </div>
+        <div class="ticket-row">
+          <span class="ticket-label">Service Tier:</span>
+          <span class="ticket-val" id="modalServiceTier">-</span>
+        </div>
+        <div class="ticket-row">
+          <span class="ticket-label">Date & Bay Time:</span>
+          <span class="ticket-val" id="modalScheduleTime" style="color: #34d399;">-</span>
+        </div>
+        <div class="ticket-row" style="border-top: 1px dashed rgba(255,255,255,0.1); margin-top: 6px; padding-top: 6px;">
+          <span class="ticket-label">Total Amount:</span>
+          <span class="ticket-val" id="modalTotalBill" style="color: #fbbf24; font-family: var(--font-mono); font-size: 14px;">$0</span>
+        </div>
+      </div>
+
+      <div style="background: rgba(212, 175, 55, 0.12); border: 1px solid rgba(212, 175, 55, 0.35); border-radius: 8px; padding: 10px; font-size: 11px; color: #fbbf24; text-align: left; margin-bottom: 16px;">
+        📲 <strong>Confirmation Alert:</strong> An automated SMS & WhatsApp message has been dispatched. Our service manager will call you prior to arrival if any pre-checks are needed.
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <button class="btn-neo btn-neo-secondary" style="flex: 1;" onclick="closeModal('bookingConfirmedModal')">
+          Close
+        </button>
+        <button class="btn-neo btn-neo-primary" style="flex: 1;" onclick="closeModal('bookingConfirmedModal'); switchTab('admin-bookings');">
+          View in Operations →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
