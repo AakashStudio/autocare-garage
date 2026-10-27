@@ -482,14 +482,14 @@
             </div>
 
             <button type="submit" id="loginSubmitBtn" class="auth-btn-primary">
-              Sign In to Workshop Floor →
+              Sign In to Workshop Floor &rarr;
             </button>
           </form>
 
           <!-- Quick Test Credentials (Essential for SaaS Testing) -->
           <div class="demo-creds-card">
             <div class="demo-creds-title">
-              <span>🚀 1-Click Quick Testing Accounts</span>
+              <span>⚡ 1-Click Demo Accounts</span>
               <span style="font-size: 9.5px; opacity: 0.7;">Click to auto-fill</span>
             </div>
             <div class="demo-pill-grid">
@@ -498,7 +498,7 @@
                 <div class="demo-chip-sub">admin@apexauto.com</div>
               </button>
               <button type="button" class="demo-chip-btn" onclick="fillCreds('garage@autocare.com', 'garage123')">
-                <div class="demo-chip-role">🔧 Garage Owner</div>
+                <div class="demo-chip-role">🏢 Garage Owner</div>
                 <div class="demo-chip-sub">garage@autocare.com</div>
               </button>
             </div>
@@ -544,7 +544,7 @@
             </div>
 
             <button type="submit" id="signupSubmitBtn" class="auth-btn-primary">
-              Launch Garage Workspace →
+              Launch Garage Workspace &rarr;
             </button>
           </form>
         </div>
@@ -571,7 +571,7 @@
           <span class="fmc-pulse"></span>
           Live Workshop Telemetry Active
         </div>
-        <div class="fmc-sub">12 Automotive Bays Connected • Real-Time Synchronization</div>
+        <div class="fmc-sub">12 Automotive Bays Connected &bull; Real-Time Synchronization</div>
       </div>
 
       <!-- Bottom Endorsement Quote Box -->
@@ -582,7 +582,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div>
             <div class="auth-quote-author">Marcus Vance</div>
-            <div style="font-size: 11px; color: #94a3b8;">Chief Operating Director • Brembo Certified Center</div>
+            <div style="font-size: 11px; color: #94a3b8;">Chief Operating Director &bull; Brembo Certified Center</div>
           </div>
           <div style="color: #fbbf24; font-size: 13px;">★★★★★</div>
         </div>
@@ -626,7 +626,7 @@
       const text = document.getElementById('authAlertMsg');
 
       alertBox.className = `auth-alert ${type}`;
-      icon.innerText = type === 'error' ? '⚠️' : '✓';
+      icon.innerHTML = type === "error" ? "⚠️" : "✅";
       text.innerText = msg;
     }
 
@@ -732,14 +732,21 @@
       }
     }
 
-    // Check if already logged in
+        // Check if already logged in - auto redirect to workspace
     document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('force') === 'true') return;
+
       const existingUser = localStorage.getItem('apex_user');
       if (existingUser) {
         try {
           const user = JSON.parse(existingUser);
           if (user && user.id) {
-            // Can offer auto-redirect or stay on login
+            if (user.role === 'super_admin') {
+              window.location.replace('super-admin.html');
+            } else {
+              window.location.replace('index.html');
+            }
           }
         } catch(e) {}
       }
