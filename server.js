@@ -573,7 +573,8 @@ app.put('/api/bookings/:id', async (req, res) => {
       status,
       assigned_staff_id,
       total_amount,
-      notes
+      notes,
+      extra_items
     } = req.body;
 
     const existing = queryAll(db, "SELECT * FROM bookings WHERE id = ?", [id]);
@@ -596,6 +597,7 @@ app.put('/api/bookings/:id', async (req, res) => {
     const updatedAssignedStaff = assigned_staff_id !== undefined ? (assigned_staff_id ? parseInt(assigned_staff_id) : null) : cur.assigned_staff_id;
     const updatedTotalAmount = total_amount !== undefined ? parseFloat(total_amount) : cur.total_amount;
     const updatedNotes = notes !== undefined ? notes : cur.notes;
+    const updatedExtraItems = extra_items !== undefined ? (typeof extra_items === 'string' ? extra_items : JSON.stringify(extra_items)) : (cur.extra_items || '[]');
 
     const sql = `
       UPDATE bookings 
@@ -612,7 +614,8 @@ app.put('/api/bookings/:id', async (req, res) => {
           status = ?,
           assigned_staff_id = ?,
           total_amount = ?,
-          notes = ?
+          notes = ?,
+          extra_items = ?
       WHERE id = ?
     `;
 
@@ -631,6 +634,7 @@ app.put('/api/bookings/:id', async (req, res) => {
       updatedAssignedStaff,
       updatedTotalAmount,
       updatedNotes,
+      updatedExtraItems,
       id
     ]);
 

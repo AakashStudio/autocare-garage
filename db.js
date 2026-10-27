@@ -49,6 +49,7 @@ function upgradeSaaSSchema(db) {
     "ALTER TABLE users ADD COLUMN garage_id INTEGER DEFAULT 1",
     "ALTER TABLE users ADD COLUMN status TEXT DEFAULT 'Active'",
     "ALTER TABLE bookings ADD COLUMN garage_id INTEGER DEFAULT 1",
+    "ALTER TABLE bookings ADD COLUMN extra_items TEXT DEFAULT '[]'",
     "ALTER TABLE inventory ADD COLUMN garage_id INTEGER DEFAULT 1",
     "ALTER TABLE expenses ADD COLUMN garage_id INTEGER DEFAULT 1",
     "ALTER TABLE staff ADD COLUMN garage_id INTEGER DEFAULT 1",

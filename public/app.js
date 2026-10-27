@@ -780,6 +780,7 @@ function renderBookingsTable(bookings) {
 let activePaymentSelectEl = null;
 let currentBaseAmount = 0;
 let currentExtraItems = [];
+let currentJobExtraItems = [];
 
 function handleStatusDropdownChange(selectEl, bookingId) {
   const newStatus = selectEl.value;
@@ -794,10 +795,24 @@ function handleStatusDropdownChange(selectEl, bookingId) {
       return;
     }
 
-    // Set baseline and clear any previous extra items
+    // Set baseline and initialize extra items from Job Card or booking
     currentBaseAmount = parseFloat(booking.total_amount) || 0;
-    currentExtraItems = [];
     currentPaidBooking = booking;
+
+    let initialExtras = [];
+    if (currentJobExtraItems && currentJobExtraItems.length > 0 && activeViewBooking && activeViewBooking.id == bookingId) {
+      initialExtras = [...currentJobExtraItems];
+    } else if (booking.extra_items) {
+      try {
+        const parsed = typeof booking.extra_items === 'string' ? JSON.parse(booking.extra_items) : booking.extra_items;
+        if (Array.isArray(parsed)) initialExtras = parsed;
+      } catch(e) {}
+    }
+
+    currentExtraItems = initialExtras.map(i => ({
+      name: (i.qty && i.qty > 1) ? `${i.name} (x${i.qty})` : i.name,
+      price: (parseFloat(i.price) * (parseFloat(i.qty) || 1)) || parseFloat(i.price) || 0
+    }));
 
     const currSym = (currentSettings && currentSettings.currency_symbol) ? currentSettings.currency_symbol : '₹';
 
@@ -1306,6 +1321,17 @@ async function openBookingDetails(bookingId) {
     const bAmount = document.getElementById('editDetailTotalAmount');
     if (bAmount) bAmount.value = parseFloat(booking.total_amount) || 0;
 
+    // Load and render dynamic extra services / spare parts for this Job Card
+    try {
+      currentJobExtraItems = typeof booking.extra_items === 'string' 
+        ? JSON.parse(booking.extra_items || '[]') 
+        : (booking.extra_items || []);
+      if (!Array.isArray(currentJobExtraItems)) currentJobExtraItems = [];
+    } catch(e) {
+      currentJobExtraItems = [];
+    }
+    renderJobCardExtraItems();
+
     // Interactive Diagnostic Checklist
     let answers = {};
     try {
@@ -1527,7 +1553,8 @@ async function saveBookingEdits() {
     issue_description,
     notes,
     assigned_staff_id: assigned_staff_id ? parseInt(assigned_staff_id) : null,
-    answers_json
+    answers_json,
+    extra_items: currentJobExtraItems
   };
 
   const topBtn = document.getElementById('btnTopSaveJobCard');
@@ -1557,6 +1584,7 @@ async function saveBookingEdits() {
 
     if (result.success && result.data) {
       activeViewBooking = result.data;
+      activeViewBooking.extra_items = currentJobExtraItems;
       
       const idx = allBookings.findIndex(b => b.id == bookingId);
       if (idx !== -1) {
@@ -2175,34 +2203,54 @@ async function loadRateCard() {
 }
 
 function updateRateCardKPIs(items) {
-  const countEl = document.getElementById('rcTotalServices');
-  if (countEl) countEl.innerText = `${items.length} Tiers`;
-
+  const currSym = (currentSettings && currentSettings.currency_symbol) ? currentSettings.currency_symbol : '₹';
   const wash = items.find(i => i.service_name.toLowerCase().includes('wash') || i.service_code === 'SRV-WASH');
   const normal = items.find(i => i.service_name.toLowerCase().includes('normal') || i.service_code === 'SRV-NORMAL');
   const deep = items.find(i => i.service_name.toLowerCase().includes('deep') || i.service_code === 'SRV-DEEP');
 
+  // Update Main Rate Card Tab
+  const countEl = document.getElementById('rcTotalServices');
+  if (countEl) countEl.innerText = `${items.length} Tiers`;
   if (document.getElementById('rcWashPrice') && wash) {
-    document.getElementById('rcWashPrice').innerText = `$${wash.base_price.toFixed(2)}`;
+    document.getElementById('rcWashPrice').innerText = `${currSym}${wash.base_price.toFixed(2)}`;
   }
   if (document.getElementById('rcNormalPrice') && normal) {
-    document.getElementById('rcNormalPrice').innerText = `$${normal.base_price.toFixed(2)}`;
+    document.getElementById('rcNormalPrice').innerText = `${currSym}${normal.base_price.toFixed(2)}`;
   }
   if (document.getElementById('rcDeepPrice') && deep) {
-    document.getElementById('rcDeepPrice').innerText = `$${deep.base_price.toFixed(2)}`;
+    document.getElementById('rcDeepPrice').innerText = `${currSym}${deep.base_price.toFixed(2)}`;
+  }
+
+  // Update Settings Charges Sub-Tab
+  const settingsCountEl = document.getElementById('settingsRcTotalServices');
+  if (settingsCountEl) settingsCountEl.innerText = `${items.length} Services`;
+  if (document.getElementById('settingsRcWashPrice') && wash) {
+    document.getElementById('settingsRcWashPrice').innerText = `${currSym}${wash.base_price.toFixed(2)}`;
+  }
+  if (document.getElementById('settingsRcNormalPrice') && normal) {
+    document.getElementById('settingsRcNormalPrice').innerText = `${currSym}${normal.base_price.toFixed(2)}`;
+  }
+  if (document.getElementById('settingsRcDeepPrice') && deep) {
+    document.getElementById('settingsRcDeepPrice').innerText = `${currSym}${deep.base_price.toFixed(2)}`;
   }
 }
 
 function renderRateCardTable(items) {
-  const tbody = document.getElementById('rateCardTableBody');
-  if (!tbody) return;
+  const tbodyMain = document.getElementById('rateCardTableBody');
+  const tbodySettings = document.getElementById('settingsRateCardTableBody');
+  if (!tbodyMain && !tbodySettings) return;
+
+  const currSym = (currentSettings && currentSettings.currency_symbol) ? currentSettings.currency_symbol : '₹';
 
   let filtered = items;
   if (currentRateCardCategory !== 'All') {
     filtered = filtered.filter(i => i.category === currentRateCardCategory);
   }
 
-  const searchInput = document.getElementById('rcSearchInput')?.value.trim().toLowerCase();
+  const searchMain = document.getElementById('rcSearchInput')?.value.trim().toLowerCase();
+  const searchSettings = document.getElementById('settingsRcSearchInput')?.value.trim().toLowerCase();
+  const searchInput = searchMain || searchSettings;
+
   if (searchInput) {
     filtered = filtered.filter(i => 
       i.service_name.toLowerCase().includes(searchInput) ||
@@ -2211,60 +2259,63 @@ function renderRateCardTable(items) {
     );
   }
 
+  let html = '';
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--text-dim);">No service rates found matching filter.</td></tr>`;
-    return;
+    html = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--text-dim);">No service rates found matching filter.</td></tr>`;
+  } else {
+    html = filtered.map(item => {
+      let icon = '🔧';
+      if (item.category.includes('Wash')) icon = '🧼';
+      if (item.category.includes('Fluid') || item.category.includes('Oil')) icon = '🛢️';
+      if (item.category.includes('Detail')) icon = '✨';
+      if (item.category.includes('Brake')) icon = '🛑';
+      if (item.category.includes('AC') || item.category.includes('Electrical')) icon = '❄️';
+
+      return `
+        <tr>
+          <td style="font-family:var(--font-mono); font-weight:700; color:#38bdf8;">
+            ${escapeHtml(item.service_code)}
+          </td>
+          <td>
+            <div style="font-weight:700; color:#fff; font-size:13px; display:flex; align-items:center; gap:6px;">
+              <span>${icon}</span>
+              <span>${escapeHtml(item.service_name)}</span>
+            </div>
+            <div style="font-size:11px; color:var(--text-dim); margin-top:3px; max-width:320px;">
+              ${escapeHtml(item.description || 'Standard garage labor and inspection')}
+            </div>
+          </td>
+          <td>
+            <span class="pill pill-confirmed" style="font-size:10.5px;">${escapeHtml(item.category)}</span>
+          </td>
+          <td>
+            <span style="font-family:var(--font-mono); font-size:11.5px; color:#e2e8f0;">${item.estimated_time_mins} mins</span>
+          </td>
+          <td>
+            <span style="font-family:var(--font-mono); font-size:15px; font-weight:900; color:#fbbf24;">
+              ${currSym}${parseFloat(item.base_price).toFixed(2)}
+            </span>
+          </td>
+          <td>
+            <span class="pill pill-progress" style="font-size:10px;">Active</span>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button class="btn-neo btn-neo-primary btn-neo-sm" title="Edit Price & Scope" onclick="openEditRateCardModal(${item.id})">
+                ✏️ Edit Price
+              </button>
+              <button class="btn-neo btn-neo-secondary btn-neo-sm" style="color:#f87171;" title="Deactivate" onclick="deleteRateCardItem(${item.id}, '${escapeHtml(item.service_name)}')">
+                ✕
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
   }
 
-  tbody.innerHTML = filtered.map(item => {
-    let icon = '🔧';
-    if (item.category.includes('Wash')) icon = '🧼';
-    if (item.category.includes('Fluid') || item.category.includes('Oil')) icon = '🛢️';
-    if (item.category.includes('Detail')) icon = '✨';
-    if (item.category.includes('Brake')) icon = '🛑';
-    if (item.category.includes('AC') || item.category.includes('Electrical')) icon = '❄️';
-
-    return `
-      <tr>
-        <td style="font-family:var(--font-mono); font-weight:700; color:#38bdf8;">
-          ${escapeHtml(item.service_code)}
-        </td>
-        <td>
-          <div style="font-weight:700; color:#fff; font-size:13px; display:flex; align-items:center; gap:6px;">
-            <span>${icon}</span>
-            <span>${escapeHtml(item.service_name)}</span>
-          </div>
-          <div style="font-size:11px; color:var(--text-dim); margin-top:3px; max-width:320px;">
-            ${escapeHtml(item.description || 'Standard garage labor and inspection')}
-          </div>
-        </td>
-        <td>
-          <span class="pill pill-confirmed" style="font-size:10.5px;">${escapeHtml(item.category)}</span>
-        </td>
-        <td>
-          <span style="font-family:var(--font-mono); font-size:11.5px; color:#e2e8f0;">${item.estimated_time_mins} mins</span>
-        </td>
-        <td>
-          <span style="font-family:var(--font-mono); font-size:15px; font-weight:900; color:#fbbf24;">
-            $${parseFloat(item.base_price).toFixed(2)}
-          </span>
-        </td>
-        <td>
-          <span class="pill pill-progress" style="font-size:10px;">Active</span>
-        </td>
-        <td>
-          <div style="display:flex; gap:6px; align-items:center;">
-            <button class="btn-neo btn-neo-primary btn-neo-sm" title="Edit Price & Scope" onclick="openEditRateCardModal(${item.id})">
-              ✏️ Edit Price
-            </button>
-            <button class="btn-neo btn-neo-secondary btn-neo-sm" style="color:#f87171;" title="Deactivate" onclick="deleteRateCardItem(${item.id}, '${escapeHtml(item.service_name)}')">
-              ✕
-            </button>
-          </div>
-        </td>
-      </tr>
-    `;
-  }).join('');
+  if (tbodyMain) tbodyMain.innerHTML = html;
+  if (tbodySettings) tbodySettings.innerHTML = html;
 }
 
 function filterRateCardCategory(cat, btn) {
@@ -2606,4 +2657,209 @@ function escapeHtml(text) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+
+// ========================================================
+// JOB CARD DYNAMIC EXTRA SERVICES & BILL ADD-ONS
+// ========================================================
+function openAddJobExtraModal() {
+  const presetSel = document.getElementById('selJobExtraPreset');
+  const currSym = (currentSettings && currentSettings.currency_symbol) ? currentSettings.currency_symbol : '₹';
+
+  if (presetSel) {
+    presetSel.innerHTML = `<option value="">-- Choose from standard rates (or type below) --</option>`;
+    if (allRateCardItems && allRateCardItems.length > 0) {
+      allRateCardItems.forEach(item => {
+        presetSel.innerHTML += `<option value="${item.id}">${escapeHtml(item.service_name)} (${escapeHtml(item.category)}) — ${currSym}${parseFloat(item.base_price).toFixed(2)}</option>`;
+      });
+    } else {
+      fetch(`${API_BASE}/rate-card`)
+        .then(r => r.json())
+        .then(res => {
+          if (res.success && res.data) {
+            allRateCardItems = res.data;
+            allRateCardItems.forEach(item => {
+              presetSel.innerHTML += `<option value="${item.id}">${escapeHtml(item.service_name)} (${escapeHtml(item.category)}) — ${currSym}${parseFloat(item.base_price).toFixed(2)}</option>`;
+            });
+          }
+        }).catch(() => {});
+    }
+  }
+
+  // Clear inputs
+  const nameInput = document.getElementById('inputJobExtraName');
+  if (nameInput) nameInput.value = '';
+  const priceInput = document.getElementById('inputJobExtraPrice');
+  if (priceInput) priceInput.value = '';
+  const qtyInput = document.getElementById('inputJobExtraQty');
+  if (qtyInput) qtyInput.value = '1';
+  const catInput = document.getElementById('inputJobExtraCategory');
+  if (catInput) catInput.value = 'Mechanical & Brakes';
+
+  const modal = document.getElementById('addJobExtraModal');
+  if (modal) modal.classList.add('open');
+}
+
+function onJobExtraPresetSelected(sel) {
+  const itemId = sel.value;
+  if (!itemId) return;
+  const item = (allRateCardItems || []).find(i => i.id == itemId);
+  if (!item) return;
+
+  const nameInput = document.getElementById('inputJobExtraName');
+  if (nameInput) nameInput.value = item.service_name;
+  const priceInput = document.getElementById('inputJobExtraPrice');
+  if (priceInput) priceInput.value = item.base_price;
+  const catInput = document.getElementById('inputJobExtraCategory');
+  if (catInput && item.category) catInput.value = item.category;
+}
+
+function submitAddJobExtraItem() {
+  const name = document.getElementById('inputJobExtraName')?.value.trim();
+  const category = document.getElementById('inputJobExtraCategory')?.value || 'Custom Work';
+  const qty = parseInt(document.getElementById('inputJobExtraQty')?.value) || 1;
+  const price = parseFloat(document.getElementById('inputJobExtraPrice')?.value);
+
+  if (!name) {
+    alert('Please enter an item or service name.');
+    return;
+  }
+  if (isNaN(price) || price < 0) {
+    alert('Please enter a valid unit rate/price.');
+    return;
+  }
+
+  currentJobExtraItems.push({
+    name,
+    category,
+    qty: Math.max(1, qty),
+    price,
+    total: Math.max(1, qty) * price
+  });
+
+  closeModal('addJobExtraModal');
+  renderJobCardExtraItems();
+}
+
+function deleteJobCardExtraItem(idx) {
+  if (idx >= 0 && idx < currentJobExtraItems.length) {
+    currentJobExtraItems.splice(idx, 1);
+    renderJobCardExtraItems();
+  }
+}
+
+function renderJobCardExtraItems() {
+  const tbody = document.getElementById('jobCardExtraItemsTableBody');
+  const countPill = document.getElementById('lblJobExtraCount');
+  const extraAmountEl = document.getElementById('lblJobExtraAmount');
+  const baseAmountEl = document.getElementById('lblJobBaseAmount');
+  const grandEstEl = document.getElementById('lblJobGrandEstAmount');
+  const currSym = (currentSettings && currentSettings.currency_symbol) ? currentSettings.currency_symbol : '₹';
+
+  if (!tbody) return;
+
+  const extraTotal = currentJobExtraItems.reduce((sum, item) => {
+    const q = parseFloat(item.qty) || 1;
+    const p = parseFloat(item.price) || 0;
+    return sum + (q * p);
+  }, 0);
+
+  if (countPill) countPill.innerText = `${currentJobExtraItems.length} Added`;
+  if (extraAmountEl) extraAmountEl.innerText = `${currSym}${extraTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+  const baseInput = document.getElementById('editDetailTotalAmount');
+  const baseAmt = parseFloat(baseInput?.value) || 0;
+  if (baseAmountEl) baseAmountEl.innerText = `${currSym}${baseAmt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  if (grandEstEl) grandEstEl.innerText = `${currSym}${(baseAmt + extraTotal).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+  if (currentJobExtraItems.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align: center; color: var(--text-dim); padding: 14px;">
+          No extra services or spare parts added yet. Click <strong>"+ Add Service / Part"</strong> above if extra work was performed.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = currentJobExtraItems.map((item, idx) => {
+    const q = parseFloat(item.qty) || 1;
+    const p = parseFloat(item.price) || 0;
+    const lineTotal = q * p;
+    return `
+      <tr>
+        <td style="color:var(--text-dim); font-family:var(--font-mono); font-size:11px;">#${idx + 1}</td>
+        <td style="font-weight:700; color:#fff;">
+          ${escapeHtml(item.name)}
+        </td>
+        <td>
+          <span class="pill pill-pending" style="font-size:10px;">${escapeHtml(item.category || 'General')}</span>
+        </td>
+        <td style="text-align:center; font-family:var(--font-mono); font-weight:700; color:#fbbf24;">
+          ${q}
+        </td>
+        <td style="text-align:right; font-family:var(--font-mono); color:#e2e8f0;">
+          ${currSym}${p.toFixed(2)}
+        </td>
+        <td style="text-align:right; font-family:var(--font-mono); font-weight:800; color:#34d399;">
+          ${currSym}${lineTotal.toFixed(2)}
+        </td>
+        <td style="text-align:center;">
+          <button type="button" onclick="deleteJobCardExtraItem(${idx})" style="background:none; border:none; color:#f87171; cursor:pointer; font-weight:800; font-size:14px;" title="Remove this item">
+            &times;
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ========================================================
+// SETTINGS SUB-TABS (PROFILE & TAX vs MASTER CHARGES)
+// ========================================================
+function switchSettingsSubTab(subTab) {
+  const profileDiv = document.getElementById('settingsSubTab_profile');
+  const chargesDiv = document.getElementById('settingsSubTab_charges');
+  const btnProfile = document.getElementById('btnSettingsSubTab_profile');
+  const btnCharges = document.getElementById('btnSettingsSubTab_charges');
+
+  if (subTab === 'profile') {
+    if (profileDiv) profileDiv.style.display = 'block';
+    if (chargesDiv) chargesDiv.style.display = 'none';
+    if (btnProfile) btnProfile.classList.add('active');
+    if (btnCharges) btnCharges.classList.remove('active');
+  } else if (subTab === 'charges') {
+    if (profileDiv) profileDiv.style.display = 'none';
+    if (chargesDiv) chargesDiv.style.display = 'block';
+    if (btnProfile) btnProfile.classList.remove('active');
+    if (btnCharges) btnCharges.classList.add('active');
+    loadRateCard();
+  }
+}
+
+function filterSettingsRateCardCategory(cat, btn) {
+  currentRateCardCategory = cat;
+  document.querySelectorAll('#settingsRateCardCategoryFilter .filter-pill').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#rateCardCategoryFilter .filter-pill').forEach(b => {
+    if (b.innerText.toLowerCase().includes(cat.toLowerCase()) || (cat === 'All' && b.innerText.includes('All'))) {
+      b.classList.add('active');
+    } else {
+      b.classList.remove('active');
+    }
+  });
+  if (btn) btn.classList.add('active');
+  renderRateCardTable(allRateCardItems);
+}
+
+let settingsRcSearchTimer = null;
+function debounceSettingsRateCardSearch() {
+  clearTimeout(settingsRcSearchTimer);
+  settingsRcSearchTimer = setTimeout(() => {
+    const val = document.getElementById('settingsRcSearchInput')?.value || '';
+    const mainInput = document.getElementById('rcSearchInput');
+    if (mainInput) mainInput.value = val;
+    renderRateCardTable(allRateCardItems);
+  }, 200);
 }
