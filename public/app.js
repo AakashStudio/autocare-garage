@@ -376,16 +376,11 @@ function renderDashboardBookingsTable() {
         </td>
         <td><span class="pill ${badgeClass}">${b.status}</span></td>
         <td onclick="event.stopPropagation()">
-          <div class="row-action-wrapper">
-            <select class="table-status-select" onclick="event.stopPropagation()" onchange="event.stopPropagation(); handleStatusDropdownChange(this, ${b.id})" title="Change status">
-              <option value="" disabled selected>${b.status}</option>
-              <option value="Confirmed" ${b.status === 'Confirmed' ? 'selected' : ''}>Confirm</option>
-              <option value="In-Progress" ${b.status === 'In-Progress' ? 'selected' : ''}>In-Progress</option>
-              <option value="Completed" ${b.status === 'Completed' ? 'selected' : ''}>Complete (Pay)</option>
-              <option value="Rescheduled" ${b.status === 'Rescheduled' ? 'selected' : ''}>Reschedule</option>
-              <option value="No-Show" ${b.status === 'No-Show' ? 'selected' : ''}>No-Show</option>
-              <option value="Cancelled" ${b.status === 'Cancelled' ? 'selected' : ''}>Cancel</option>
-            </select>
+          <div class="row-action-wrapper" style="display:flex; align-items:center; gap:8px;">
+            <button type="button" class="btn-neo btn-neo-primary btn-neo-sm" onclick="openBookingDetails(${b.id})" title="Open Digital Job Card & Bill" style="padding: 6px 12px; font-weight: 800; font-size: 11px; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              <span>Job Card</span>
+            </button>
             <button type="button" class="btn-row-dots" title="More Actions" onclick="event.stopPropagation(); toggleRowActionMenu(event, 'dash-${b.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
                 <circle cx="12" cy="5" r="2.2"></circle>
@@ -725,16 +720,11 @@ function renderBookingsTable(bookings) {
         <td><span class="pill ${badgeClass}">${b.status}</span></td>
         <td style="font-weight:700; color:#34d399; font-family:var(--font-mono);">$${b.total_amount ? b.total_amount.toLocaleString('en-US') : 0}</td>
         <td onclick="event.stopPropagation()">
-          <div class="row-action-wrapper">
-            <select class="table-status-select" onclick="event.stopPropagation()" onchange="event.stopPropagation(); handleStatusDropdownChange(this, ${b.id})" title="Update status">
-              <option value="" disabled selected>${b.status}</option>
-              <option value="Confirmed" ${b.status === 'Confirmed' ? 'selected' : ''}>Confirm</option>
-              <option value="In-Progress" ${b.status === 'In-Progress' ? 'selected' : ''}>In-Progress</option>
-              <option value="Completed" ${b.status === 'Completed' ? 'selected' : ''}>Complete (Pay)</option>
-              <option value="Rescheduled" ${b.status === 'Rescheduled' ? 'selected' : ''}>Reschedule</option>
-              <option value="No-Show" ${b.status === 'No-Show' ? 'selected' : ''}>No-Show</option>
-              <option value="Cancelled" ${b.status === 'Cancelled' ? 'selected' : ''}>Cancel</option>
-            </select>
+          <div class="row-action-wrapper" style="display:flex; align-items:center; gap:8px;">
+            <button type="button" class="btn-neo btn-neo-primary btn-neo-sm" onclick="openBookingDetails(${b.id})" title="Open Digital Job Card & Bill" style="padding: 6px 12px; font-weight: 800; font-size: 11px; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              <span>Job Card</span>
+            </button>
             <button type="button" class="btn-row-dots" id="dotBtn-${b.id}" title="More Actions" onclick="event.stopPropagation(); toggleRowActionMenu(event, ${b.id})">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
                 <circle cx="12" cy="5" r="2.2"></circle>
@@ -2862,4 +2852,17 @@ function debounceSettingsRateCardSearch() {
     if (mainInput) mainInput.value = val;
     renderRateCardTable(allRateCardItems);
   }, 200);
+}
+
+// ========================================================
+// PROCEED TO BILL SETTLEMENT DIRECTLY FROM JOB CARD
+// ========================================================
+async function proceedToBillSettlementFromJobCard() {
+  if (!activeViewBooking) return;
+  
+  // First save all changes, checklist toggles & extra add-on services
+  await saveBookingEdits();
+  
+  // Trigger payment & bill settlement flow
+  handleStatusDropdownChange({ value: 'Completed' }, activeViewBooking.id);
 }
