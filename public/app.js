@@ -1150,22 +1150,6 @@ async function confirmPaymentAndComplete() {
     alert('Failed to settle payment: ' + err.message);
   }
 }
-          <strong>Payment Settled & Job Completed!</strong> 
-          Tax Invoice ${invoiceNumber} created for $${finalTotal.toLocaleString('en-US')} via ${method}.
-        `;
-        banner.classList.add('show');
-        setTimeout(() => { banner.classList.remove('show'); }, 6000);
-      }
-
-      loadBookings();
-      loadDashboardStats();
-    }
-  } catch (err) {
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = `✓ Settle & Complete Job ($${finalTotal.toLocaleString('en-US')})`;
-    alert('Failed to settle payment: ' + err.message);
-  }
-}
 
 function printReceiptSlip() {
   window.print();
